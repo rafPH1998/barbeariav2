@@ -28,7 +28,9 @@
     import ButtonForm from '../Auth/components/ButtonForm.vue'
     import SppinerLoading from '../../components/SppinerLoading.vue'
     import { reactive } from 'vue'
-    import { Link, Head, router } from '@inertiajs/vue3';
+    import { Link, Head, router, usePage } from '@inertiajs/vue3';
+
+    import { useToast } from "vue-toastification";
 
     defineProps({
         errors: Object
@@ -40,11 +42,20 @@
         password: null,
         processing: false
     })
+    
+    const page = usePage()
+    const toast = useToast();
 
     const registerUser = () => {
         router.post('/register', form, {
-            onStart: () => (form.processing = true),
-            onFinish: () => (form.processing = false)
+            onStart: () => (form.processing = true), 
+            onFinish: () => {
+                if (page.props.flash.success) {
+                    router.get('/login')
+                    toast.success(`Sucesso! ${page.props.flash.success} :)`)
+                }
+                form.processing = false
+            }
         })
     }
 </script> 

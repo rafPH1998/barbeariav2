@@ -21,8 +21,12 @@ class RegisterController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:2|max:50',
         ]);
-
-        User::query()->create($data);
+        
+        try {
+            User::query()->create($data);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
         return redirect()->route('register.store')
             ->with('success', 'Usuário cadastrado com sucesso! Faça o login');
