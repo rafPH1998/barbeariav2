@@ -1,29 +1,27 @@
 <template>
 
-    <NavBar>
-        <Link :href="route('register')" 
-            class="text-white hover:bg-white/10 
-            px-5 py-1 rounded-lg transition ease-in-out 
-            delay-150 hover:-translate-y-1 hover:scale-110 
-            hover:duration-300">
-            Registre-se
-        </Link>
+    <Head title="Login"/>
 
-        <Link :href="route('login')" 
-            class="text-white ml-6 hover:bg-white/10 
-            px-5 py-1 rounded-lg transition ease-in-out 
-            delay-150 hover:-translate-y-1 hover:scale-110 
-            hover:duration-300"
-            :class="{ 'bg-white/10': $page.url === '/login' }">
-            Login
-        </Link>
-    </NavBar>
+    <AuthLayout>
+        <h1 class="text-white">Login</h1>
 
-    <h1 class="text-white">Login</h1>
+        <form action="#" method="POST" class="flex flex-col mt-4">
+            <input-field label="E-mail" name="email" type="email"/>
+            <input-field label="Senha" name="passoword" type="passoword"/>
+
+            <button-form>
+                Salvar
+            </button-form>
+
+            <Link :href="route('index')" class="text-white flex justify-center text-xs mt-2">Esqueci minha senha</Link>
+        </form>
+    </AuthLayout>
 
 </template>
 
 <script setup>
-    import NavBar from '../../components/NavBar.vue';
-    import { Link } from '@inertiajs/vue3';
+    import AuthLayout from '../Auth/layouts/AuthLayout.vue'
+    import InputField from '../Auth/components/InputField.vue'
+    import ButtonForm from '../Auth/components/ButtonForm.vue'
+    import { Link, Head } from '@inertiajs/vue3';
 </script>

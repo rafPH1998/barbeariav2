@@ -1,27 +1,50 @@
 <template>
 
-    <NavBar>
-        <Link :href="route('register')" 
-            class="text-white hover:bg-white/10 
-            px-5 py-1 rounded-lg transition ease-in-out 
-            delay-150 hover:-translate-y-1
-            hover:duration-300 hover:scale-110 " 
-            :class="{ 'bg-white/10': $page.url === '/register' }">Registre-se
-        </Link>
+    <Head title="Registre-se"/>
 
-        <Link :href="route('login')" 
-            class="text-white ml-6 hover:bg-white/10 
-            px-5 py-1 rounded-lg transition ease-in-out 
-            delay-150 hover:-translate-y-1 hover:scale-110 
-            hover:duration-300">Login
-        </Link>
-    </NavBar>
+    <AuthLayout>
+        <h1 class="text-white">Realize um cadastro :)</h1>
 
-    <h1 class="text-white">Register</h1>
+        <form @submit.prevent="registerUser()" action="#" method="POST" class="flex flex-col mt-4">
+            <input-field v-model="form.name" label="Nome" name="name" type="text" :error="errors.name"/>
+            <input-field v-model="form.email" label="E-mail" name="email" type="email" :error="errors.email"/>
+            <input-field v-model="form.password" label="Senha" name="password" type="password" :error="errors.password"/>
+
+            <button-form>
+                <sppiner-loading v-show="form.processing"/>
+                <span v-if="form.processin">Cadastrando...</span>
+                <span v-else>Cadastrar</span>
+            </button-form>
+
+            <Link :href="route('login')" class="text-white flex justify-center text-xs mt-2">Já possui uma conta? Faça o login</Link>
+        </form>
+    </AuthLayout>
 
 </template>
 
 <script setup>
-import NavBar from '../../components/NavBar.vue';
-import { Link } from '@inertiajs/vue3';
-</script>
+    import AuthLayout from '../Auth/layouts/AuthLayout.vue'
+    import InputField from '../Auth/components/InputField.vue'
+    import ButtonForm from '../Auth/components/ButtonForm.vue'
+    import SppinerLoading from '../../components/SppinerLoading.vue'
+    import { reactive } from 'vue'
+    import { Link, Head, router } from '@inertiajs/vue3';
+
+    defineProps({
+        errors: Object
+    })
+
+    const form = reactive({
+        name: null,
+        email: null,
+        password: null,
+        processing: false
+    })
+
+    const registerUser = () => {
+        router.post('/register', form, {
+            onStart: () => (form.processing = true),
+            onFinish: () => (form.processing = false)
+        })
+    }
+</script> 
