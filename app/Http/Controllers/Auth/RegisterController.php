@@ -22,6 +22,8 @@ class RegisterController extends Controller
             'password' => 'required|min:2|max:50',
         ]);
         
+        $data['password'] = bcrypt($request->password);
+        
         try {
             User::query()->create($data);
         } catch (\Throwable $th) {

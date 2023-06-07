@@ -12,7 +12,7 @@
 
             <button-form>
                 <sppiner-loading v-show="form.processing"/>
-                <span v-if="form.processin">Cadastrando...</span>
+                <span v-if="form.processing">Cadastrando...</span>
                 <span v-else>Cadastrar</span>
             </button-form>
 
@@ -29,7 +29,6 @@
     import SppinerLoading from '../../components/SppinerLoading.vue'
     import { reactive } from 'vue'
     import { Link, Head, router, usePage } from '@inertiajs/vue3';
-
     import { useToast } from "vue-toastification";
 
     defineProps({
