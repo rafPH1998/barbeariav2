@@ -42,7 +42,7 @@
                 </div>
             </Link>
             <Link :href="route('schedules.show', 1)" 
-            :class="{ 'bg-white/10': $page.url === '/schedules/show' }"
+                :class="{ 'bg-white/10': $page.url === '/schedules/show' }"
                 class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
                 <div class="relative flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
                     <div>
@@ -102,7 +102,7 @@
 
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 
 const page = usePage()
 const user = computed(() => page.props.flash.user)
