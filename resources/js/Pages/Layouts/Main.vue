@@ -3,13 +3,13 @@
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <div class="relative ml-3">
                 <div class="flex items-center">
-                    <p class="text-white text-xs mr-3">Bem vindo, usuário</p>
+                    <p class="text-white text-xs mr-3">Bem vindo, {{ user.name }}</p>
                     <button 
                         @click="showDropdown()"
                         type="button" 
                         class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                         <span class="sr-only">Open user menu</span>
-                        <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                        <img class="h-8 w-8 rounded-full" src="/assets/images/user.svg">
                     </button>
                 </div>
                 <div
@@ -37,10 +37,13 @@
 <script setup>
 import SideBar from '../Layouts/SideBar.vue'
 import NavBar from '../Layouts/NavBar.vue'
-import { Link } from '@inertiajs/vue3';
-import { ref } from 'vue'
+import { Link, usePage } from '@inertiajs/vue3';
+import { ref, computed } from 'vue'
 
 const dropdown = ref(false)
+const page = usePage()
+
 const showDropdown = () => dropdown.value = !dropdown.value
+const user = computed(() => page.props.flash.user)
 
 </script>

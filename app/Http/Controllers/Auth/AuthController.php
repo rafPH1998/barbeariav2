@@ -25,8 +25,8 @@ class AuthController extends Controller
             return redirect()->route('login')->with('error', 'E-mail e/ou senha inválidos');
         }
 
-        $request->session()->regenerate();
-        return redirect()->route('index');
+      //  $request->session()->regenerate();
+        return redirect()->route('dashboard');
     }
 
     public function logout()
