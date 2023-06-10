@@ -20,7 +20,7 @@ Route::get('/', HomeController::class)->name('index');
 /*
 *Route para dashboard
 */
-Route::get('/dashboard', DashboardController::class)->name('dashboard');
+Route::get('/dashboard', DashboardController::class)->name('dashboard')->middleware('auth');
 
 /*
 *Route para login
