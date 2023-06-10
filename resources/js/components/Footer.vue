@@ -9,7 +9,7 @@
                 <div class="p-5 flex items-center">
                     <img class="h-8 w-8 rounded-full" src="assets/images/relogio.png">
                     <div class="ml-2">
-                        <p class="text-xs">Domingo: <b class="text-red-400">fechado</b></p>
+                        <p class="text-xs">Domingo e feriados: <b class="text-red-400">fechado</b></p>
                         <p class="mt-1 text-xs">Segunda-Feira a Sábado: <b>09:00 às 20:00</b></p>
                     </div>
                 </div>
