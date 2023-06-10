@@ -7,9 +7,9 @@ use Inertia\Inertia;
 
 class ProfileController extends Controller
 { 
-    public function edit(string $id)
+    public function index()
     {
-        return Inertia::render('Profile/Show');
+        return Inertia::render('Profile/Index');
     }
 
     /**

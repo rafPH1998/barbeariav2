@@ -48,4 +48,4 @@ Route::resource('/assessments', AssessmentsController::class)->only(['index', 's
 /*
 *Route para perfil
 */
-Route::resource('/profile', ProfileController::class)->only(['edit', 'update']);
+Route::resource('/profile', ProfileController::class)->only(['index', 'update']);

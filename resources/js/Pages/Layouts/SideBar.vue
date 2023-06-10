@@ -53,7 +53,7 @@
                     <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 py-1.5 rounded-full bg-indigo-800 text-xs font-mono font-bold">23</div>
                 </div>
             </Link>
-            <Link :href="route('profile.edit', 1)" class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
+            <Link :href="route('profile.index')" class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
                 <div class="relative flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
                     <div>
                         <img class="h-10 w-10 rounded-full mt-2" src="/assets/images/perfil.png">
