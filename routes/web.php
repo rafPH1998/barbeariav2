@@ -3,12 +3,10 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function() {
-    return Inertia::render('Home');
-})->name('index');
+Route::get('/', HomeController::class)->name('index');
 
 /*
 *Route para dashboard

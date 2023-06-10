@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function login()
     {
@@ -31,7 +31,6 @@ class LoginController extends Controller
 
     public function logout()
     {
-        Auth::logout();
-        return redirect()->route('login');
+        dd('deslogar');
     }
 }
