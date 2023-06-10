@@ -30,6 +30,6 @@
 </template>
 
 <script setup>
-import SideBar from '../components/SideBar.vue';
-import NavBar from './NavBar.vue';
+import SideBar from '../Layouts/SideBar.vue'
+import NavBar from '../Layouts/NavBar.vue'
 </script>

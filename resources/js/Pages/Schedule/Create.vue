@@ -8,5 +8,5 @@
 
 
 <script setup>
-import Main from '../../components/Main.vue';
+import Main from '../Layouts/Main.vue';
 </script>

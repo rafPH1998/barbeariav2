@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-    import NavBar from '../../../components/NavBar.vue';
+    import NavBar from '../../Layouts/NavBar.vue';
     import { Link } from '@inertiajs/vue3';
 </script>
 

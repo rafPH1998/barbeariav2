@@ -71,7 +71,5 @@
 </template>
 
 <script setup>
-import NavBar from '../../components/NavBar.vue';
-import Main from '../../components/Main.vue';
-import { Link } from '@inertiajs/vue3';
+import Main from '../Layouts/Main.vue';
 </script>

@@ -130,8 +130,8 @@
 
 <script setup>
     import { Link, Head } from '@inertiajs/vue3';
-    import NavBar from '../components/NavBar.vue';
-    import Footer from '../components/Footer.vue';
+    import NavBar from '../Pages/Layouts/NavBar.vue';
+    import Footer from '../Pages/Layouts/Footer.vue';
 </script>
 
 <style>
