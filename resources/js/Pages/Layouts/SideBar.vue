@@ -85,7 +85,8 @@
                     </div>
                 </div>
             </Link>
-            <Link :href="route('logout')" class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
+            <Link :href="route('logout')" method="POST"
+                class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
                 <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
                     <div>
                         <img class="h-10 w-10 rounded-full mt-2" src="/assets/images/sair.png">

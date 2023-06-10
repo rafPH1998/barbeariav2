@@ -38,7 +38,7 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 /*
 *Route para agendamentos
 */
-Route::resource('/schedules', ScheduleController::class)->only(['create', 'show', 'store']);
+Route::resource('/schedules', ScheduleController::class)->only(['index', 'create', 'show', 'store']);
 
 /*
 *Route para avaliacoes
