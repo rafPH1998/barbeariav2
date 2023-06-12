@@ -26,8 +26,8 @@
                     </div>    
                 </div>
             </Link>
-            <Link :href="route('schedules.create')" 
-                :class="{ 'bg-white/10': $page.url === '/schedules/create' }"
+            <Link :href="route('schedules.typeForm')" 
+                :class="{ 'bg-white/10': $page.url === '/schedules/type-service' }"
                 class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
                 <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
                     <div>
@@ -35,7 +35,7 @@
                     </div>
                     <div>
                         <p 
-                            :class="{'text-indigo-400': $page.url === '/schedules/create'}"
+                            :class="{'text-indigo-400': $page.url === '/type-service'}"
                             class="font-bold text-base lg:text-lg text-slate-200 leading-4 group-hover:text-indigo-400">Agendar um serviço
                         </p>
                     </div>    

@@ -13,9 +13,14 @@ class ScheduleController extends Controller
         return Inertia::render('Schedule/Index');
     }
 
-    public function create()
+    public function typeForm()
     {
-        return Inertia::render('Schedule/Create');
+        return Inertia::render('Schedule/TypeForm');
+    }
+
+    public function create($type)
+    {
+        return Inertia::render('Schedule/Create', ['service'=>$type]);
     }
 
 

@@ -38,8 +38,9 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 /*
 *Route para agendamentos
 */
-Route::resource('/schedules', ScheduleController::class)->only(['index', 'create', 'show', 'store']);
-
+Route::get('/schedules/type-service', [ScheduleController::class, 'typeForm'])->name('schedules.typeForm');
+Route::get('/create/{type}', [ScheduleController::class, 'create'])->name('schedules.create');
+Route::resource('/schedules', ScheduleController::class)->only(['index', 'show', 'store']);
 /*
 *Route para avaliacoes
 */
