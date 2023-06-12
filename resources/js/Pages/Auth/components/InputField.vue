@@ -8,7 +8,7 @@
         :id="name" 
         @input="$emit('update:modelValue', $event.target.value)"
         :class="[
-            error ? 'border border-red-500' : ''
+            error ? 'border border-1 border-red-500' : ''
         ]"
          class="bg-white/10 shadow-lg 
                 appearance-none rounded w-full py-2 px-3 text-white 
