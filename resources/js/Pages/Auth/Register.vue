@@ -10,7 +10,7 @@
             <input-field v-model="form.email" label="E-mail" name="email" type="email" :error="errors.email"/>
             <input-field v-model="form.password" label="Senha" name="password" type="password" :error="errors.password"/>
 
-            <button-form>
+            <button-form :loader="form.processing">
                 <sppiner-loading v-show="form.processing"/>
                 <span v-if="form.processing">Cadastrando...</span>
                 <span v-else>Cadastrar</span>

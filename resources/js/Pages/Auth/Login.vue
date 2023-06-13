@@ -21,7 +21,7 @@
                 :error="errors.password"
                 />
 
-            <button-form>
+            <button-form :loader="form.processing">
                 <sppiner-loading v-show="form.processing"/>
                 <span v-if="form.processing">Logando...</span>
                 <span v-else>Entrar</span>
