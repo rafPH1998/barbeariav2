@@ -20,6 +20,7 @@
                 type="password" 
                 :error="errors.password"
                 />
+         
 
             <button-form :loader="form.processing">
                 <sppiner-loading v-show="form.processing"/>
