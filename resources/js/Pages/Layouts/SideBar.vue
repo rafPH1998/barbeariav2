@@ -21,7 +21,7 @@
                     <div>
                         <p 
                             :class="{'text-indigo-400': $page.url === '/dashboard'}"
-                            class="font-bold text-base lg:text-lg text-slate-200 leading-4 group-hover:text-indigo-400">Dashboard
+                            class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400">Dashboard
                         </p>
                     </div>    
                 </div>
@@ -36,7 +36,7 @@
                     <div>
                         <p 
                             :class="{'text-indigo-400': $page.url === '/type-service'}"
-                            class="font-bold text-base lg:text-lg text-slate-200 leading-4 group-hover:text-indigo-400">Agendar um serviço
+                            class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400">Agendar um serviço
                         </p>
                     </div>    
                 </div>
@@ -49,7 +49,7 @@
                         <img class="h-10 w-10 rounded-full mt-2" src="/assets/images/cronograma.png">
                     </div>
                     <div>
-                        <p class="font-bold text-base lg:text-lg text-slate-200 leading-4 group-hover:text-indigo-400">Minhas agendas</p>
+                        <p class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400">Minhas agendas</p>
                     </div>
                     <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 py-1.5 rounded-full bg-indigo-800 text-xs font-mono font-bold">23</div>
                 </div>
@@ -64,7 +64,7 @@
                     <div>
                         <p 
                             :class="{'text-indigo-400': $page.url === '/assessments'}"
-                            class="font-bold text-base lg:text-lg text-slate-200 leading-4 group-hover:text-indigo-400">Avaliações
+                            class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400">Avaliações
                         </p>
                     </div>
                     <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 py-1.5 rounded-full bg-indigo-800 text-xs font-mono font-bold">23</div>
@@ -80,7 +80,7 @@
                     <div>
                         <p 
                             :class="{'text-indigo-400': $page.url === '/profile'}"
-                            class="font-bold text-base lg:text-lg text-slate-200 leading-4 group-hover:text-indigo-400">Perfil
+                            class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400">Perfil
                         </p>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                         <img class="h-10 w-10 rounded-full mt-2" src="/assets/images/sair.png">
                     </div>
                     <div>
-                        <p class="font-bold text-base lg:text-lg text-slate-200 leading-4 group-hover:text-indigo-400">Sair</p>
+                        <p class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400">Sair</p>
                     </div>
                 </div>
             </Link>

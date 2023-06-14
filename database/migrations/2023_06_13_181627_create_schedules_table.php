@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete("CASCADE");
             $table->date('date');
-            $table->string('hour');
             $table->string('end_service')->nullable();
+            $table->string('hour');
             $table->integer('price')->nullable();
             $table->enum('status', ['pendente', 'cancelado', 'finalizado']);
             $table->enum('service', ['corte', 'corte_barba']);
-            $table->enum('hours', [
+         /*    $table->enum('hours', [
                 'NOVE_HORAS',
                 'DEZ_HORAS',
                 'ONZE_HORAS',
@@ -33,7 +33,7 @@ return new class extends Migration
                 'SEIS_HORAS',
                 'SETE_HORAS',
                 'OITO_HORAS',
-            ]);
+            ]); */
             $table->timestamps();
         });
     }

@@ -23,19 +23,20 @@
 
                         <input type="hidden" id="hour" v-model="form.hour">
                         
-                        <div v-if="page.props.flash.error">
-                            <p class="text-red-600">{{ page.props.flash.error }}</p>
+                        <div v-if="messageError">
+                            <p class="text-red-600">{{ messageError }} <p class="text-white">Que tal agendar para outra data? =)</p></p>
                         </div>
                         <div v-else>
+                            <p v-show="form.date" class="text-xs">Selecione um horário</p>
                             <button 
                                 v-if="form.date"
                                 v-for="(buttonsHours, chave) in page.props.flash.dates"
                                 :key="chave"
                                 :class="[
-                                    form.hour === buttonsHours ? 'bg-indigo-600 text-white' : ''
+                                    form.hour === buttonsHours ? 'bg-indigo-700 text-white' : ''
                                 ]"
                                 @click.prevent="chooseDate(buttonsHours)"
-                                class="bg-transparent hover:bg-indigo-600 mt-2
+                                class="hover:bg-indigo-600 mt-2
                                 text-white-700 font-semibold cursor-pointer mr-2
                                 hover:text-white p-2 border border-indigo-500 
                                 hover:border-transparent rounded text-xs">
@@ -71,16 +72,19 @@
     import ButtonForm from '../Auth/components/ButtonForm.vue'
     import SppinerLoading from '../../components/SppinerLoading.vue'
     import { Link, router, usePage } from '@inertiajs/vue3';
-    import { reactive, ref, onMounted } from 'vue'
-
+    import { reactive, ref, onMounted, computed } from 'vue'
+    import { useToast } from "vue-toastification";
+    
     defineProps({
         service: String,
         errors: Object
     })
 
+    const toast = useToast();
     const page = usePage()
-
+    const messageError = computed(() => page.props.flash.error)
     const minDate = ref(null)
+
     const form = reactive({
         date       : null,
         hour       : null,
@@ -95,6 +99,10 @@
         router.post('/schedules', form, {
             onStart: () => (form.processing = true), 
             onFinish: () => {
+                if (page.props.flash.success) {
+                    router.get('/dashboard')
+                    toast.success(`Sucesso! ${page.props.flash.success} :)`)
+                }
                 form.processing = false
             }
         })

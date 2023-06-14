@@ -29,7 +29,7 @@ class Schedule extends Model
         $ocupados = $this->whereDate('date', '=', $data)
                         ->pluck('hour')
                         ->toArray();
-    
+
         if ($data > now()->format('Y-m-d')) {
             $novosHorarios = $this->hoursAvailableFuture($datasEnums, $ocupados);
         } else {

@@ -50,4 +50,9 @@ class User extends Authenticatable
             get: fn ($value) => Carbon::parse($value)->format('d/m/Y')     
         );
     }
+
+    public function agenda()
+    {
+        return $this->hasOne(Schedule::class);
+    }
 }
