@@ -83,13 +83,14 @@ class ScheduleController extends Controller
         
         session()->put('dates', $getDates);
 
+        
         try {
             
             $horaCorte = Carbon::createFromFormat('H:i', $request->hour);
-            $horasAdicionais = $this->calculateServiceTime($request->type);
+            $horasAdicionais = ScheduleService::calculateServiceTime($request->type);
 
             $horaCorte->addHours($horasAdicionais);
-            $price = $this->calculatePriceService($request->type);
+            $price = ScheduleService::calculatePriceService($request->type);
 
             $data['end_service'] = $horaCorte->format('H:i');
             $data['price']       = $price;
@@ -107,15 +108,21 @@ class ScheduleController extends Controller
                     ->route('schedules.create', $request->type)
                     ->with('success', 'Agendamento realizado com sucesso.');
 
-        } catch (Exception $e) {
-            // Tratar exceção aqui
+        } catch (Exception $error) {
+            return redirect()
+                ->route('schedules.create', $request->type)
+                ->with('error', $error->getCode());
         } 
     }
 
-
-    public function show(string $id)
+    public function mySchedules()
     {
-        return Inertia::render('Schedule/Show');
+        $mySchedules = $this->schedules
+                    ->where('user_id', '=', auth()->user()->id)
+                    ->first();
+
+                    //dd($mySchedules->dayOfWeek);
+        return Inertia::render('Schedule/Show', ['mySchedules'=>$mySchedules]);
     }
 
     public function getAvailableData($dates)

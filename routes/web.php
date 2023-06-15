@@ -39,13 +39,14 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 *Route para agendamentos
 */
 Route::middleware('auth')->group(function() {
+    Route::get('/schedules/my-schedules', [ScheduleController::class, 'mySchedules'])->name('schedules.mySchedules');
     Route::get('/schedules/type-service', [ScheduleController::class, 'typeForm'])->name('schedules.typeForm');
 
     Route::get('/create/{type}', [ScheduleController::class, 'create'])
         ->name('schedules.create')
         ->where('type', 'corte|corte_barba');
         
-    Route::resource('/schedules', ScheduleController::class)->only(['index', 'show', 'store']);
+    Route::resource('/schedules', ScheduleController::class)->only(['index', 'store']);
 }); 
 /*
 *Route para avaliacoes

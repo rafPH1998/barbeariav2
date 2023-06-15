@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Schedule extends Model
 {
@@ -11,9 +13,47 @@ class Schedule extends Model
 
     protected $guarded = [];
 
+    protected $appends = [
+        'day_of_week',
+        'month_of_year',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d/m/Y H:i')     
+        );
+    }
+
+    protected function dayOfWeek(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                $carbon = Carbon::parse($value);
+                $carbon->locale('pt_BR');
+                $nameDayWeek = $carbon->isoFormat('dddd');
+               
+                return $nameDayWeek;
+            }
+        );
+    }
+
+    protected function monthOfYear(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                $date = Carbon::parse($value);
+                $day = $date->format('d');
+                $month = strtoupper($date->shortEnglishMonth);
+                $year = $date->format('Y');
+                return "{$day}/{$month}/{$year}";
+            }
+        );
     }
 
     public function haveScheduling(): bool
