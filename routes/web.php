@@ -40,7 +40,11 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 */
 Route::middleware('auth')->group(function() {
     Route::get('/schedules/type-service', [ScheduleController::class, 'typeForm'])->name('schedules.typeForm');
-    Route::get('/create/{type}', [ScheduleController::class, 'create'])->name('schedules.create');
+
+    Route::get('/create/{type}', [ScheduleController::class, 'create'])
+        ->name('schedules.create')
+        ->where('type', 'corte|corte_barba');
+        
     Route::resource('/schedules', ScheduleController::class)->only(['index', 'show', 'store']);
 }); 
 /*
