@@ -3,6 +3,10 @@
         <Main>
             <p class="text-white">criar uma agenda para <b class="text-red-400">{{service}}</b></p>
 
+            <div v-show="schedules" class="mt-6">
+                <span class="text-red-600 text-xs piscar">Você já tem um agendamento pendente!</span>
+            </div>
+
             <div class="border-collapse border border-gray-700 p-6 mt-6 rounded-lg">
                 <form action="#" method="POST" class="flex flex-col mt-4">
 
@@ -47,8 +51,7 @@
                     </div>
                     <span v-if="errors.hour" class="text-red-600 text-xs ml-2">{{errors.hour}}</span>
 
-
-                    <button-form @click.prevent="storeSchedule()" :loader="form.processing">
+                    <button-form @click.prevent="storeSchedule()" :loader="form.processing || schedules">
                         <sppiner-loading v-show="form.processing"/>
                         <span v-if="form.processing">Agendando...</span>
                         <span v-else>Agendar</span>
@@ -66,7 +69,6 @@
     </div>
 </template>
 
-
 <script setup>
     import Main from '../Layouts/Main.vue';
     import ButtonForm from '../Auth/components/ButtonForm.vue'
@@ -77,6 +79,7 @@
     
     defineProps({
         service: String,
+        schedules: Boolean,
         errors: Object
     })
 
@@ -100,7 +103,7 @@
             onStart: () => (form.processing = true), 
             onFinish: () => {
                 if (page.props.flash.success) {
-                    router.get('/dashboard')
+                    router.get('/schedules/my-schedules')
                     toast.success(`Sucesso! ${page.props.flash.success} :)`)
                 }
                 form.processing = false
@@ -116,3 +119,21 @@
         minDate.value = `${year}-${month}-${day}`;
     })
 </script>
+
+<style>
+.piscar {
+    animation: piscar 1.5s infinite;
+}
+
+@keyframes piscar {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+</style>

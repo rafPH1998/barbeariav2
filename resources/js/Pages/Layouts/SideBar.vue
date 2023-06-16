@@ -26,6 +26,21 @@
                     </div>    
                 </div>
             </Link>
+            <Link :href="route('schedules.mySchedules')" 
+                :class="{ 'bg-white/10': $page.url === '/schedules/my-schedules' }"
+                class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
+                <div class="relative flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 stroke-indigo-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                    </svg>
+                    <div>
+                        <p class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400 ml-4">Minhas agendas</p>
+                    </div>
+                    <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 p-1 rounded-full bg-indigo-800 text-xs font-mono font-bold">
+                        {{ user.agenda_count }}
+                    </div>
+                </div>
+            </Link>
             <Link :href="route('schedules.typeForm')" 
                 :class="{ 'bg-white/10': $page.url === '/schedules/type-service' }"
                 class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
@@ -41,19 +56,6 @@
                     </div>    
                 </div>
             </Link>
-            <Link :href="route('schedules.mySchedules')" 
-                :class="{ 'bg-white/10': $page.url === '/schedules/show' }"
-                class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
-                <div class="relative flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 stroke-indigo-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                    <div>
-                        <p class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400 ml-4">Minhas agendas</p>
-                    </div>
-                    <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 py-1.5 rounded-full bg-indigo-800 text-xs font-mono font-bold">23</div>
-                </div>
-            </Link>
             <Link :href="route('assessments.index')"
                 :class="{ 'bg-white/10': $page.url === '/assessments' }"
                 class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
@@ -67,7 +69,7 @@
                             class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400 ml-4">Avaliações
                         </p>
                     </div>
-                    <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 py-1.5 rounded-full bg-indigo-800 text-xs font-mono font-bold">23</div>
+                    <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 p-1 rounded-full bg-indigo-800 text-xs font-mono font-bold">11</div>
                 </div>
             </Link>
             <Link :href="route('profile.index')" 
@@ -106,6 +108,5 @@ import { computed } from 'vue'
 
 const page = usePage()
 const user = computed(() => page.props.flash.user)
-
 
 </script>

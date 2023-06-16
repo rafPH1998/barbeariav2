@@ -29,7 +29,12 @@ class ScheduleController extends Controller
 
     public function create($type)
     {
-        return Inertia::render('Schedule/Create', ['service'=>$type]);
+        $schedules = $this->schedules->haveScheduling();
+
+        return Inertia::render('Schedule/Create', [
+            'service'   => $type,
+            'schedules' => $schedules
+        ]);
     }
 
     public function store(Request $request)

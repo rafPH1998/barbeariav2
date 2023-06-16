@@ -1,6 +1,12 @@
 <template>
-    <Main>
-        <p class="text-white">minhas agendas</p>
+    <Main>   
+
+        <Modal 
+            :modal="modal" 
+            @closeModal="modal = false" 
+        />
+
+        <p class="text-white">Minhas agendas</p>
          
         <div 
             :class="[
@@ -14,28 +20,28 @@
                     <h1>{{mySchedules.month_of_year}}</h1>
                     <p class="text-xs">{{mySchedules.hour}}</p>
                     <p class="text-xs">{{mySchedules.day_of_week}}</p>
-
-                    <Link 
+                    <a 
+                        @click.prevent="openModal()"
                         v-if="mySchedules.status === 'pendente'"
                         type="button"
                         class="bg-red-600 hover:bg-red-700
                         font-bold rounded-full
                         mt-12 text-center w-full
-                        text-white text-xs">
+                        text-white text-xs cursor-pointer">
                         Cancelar
-                    </Link>
+                    </a>
                 </div>
                 <div class="flex flex-col px-4 py-1">
                     <h1 class=""> {{mySchedules.service == 'corte' ? 'corte' : 'corte + barba'}}</h1>
                     <div class="flex ml-2">
                         <p class="font-bold">Status:</p>
-                        <span 
-                            :class="[
-                                mySchedules.status === 'pendente' ? 'text-yellow-500' : 
-                                (mySchedules.status === 'cancelado' ? 'text-red-500' : 'text-green-500')
-                            ]"
-                            class="ml-2"> 
-                            {{mySchedules.status}}
+                        <span class="ml-2 text-gray-500 flex"> 
+                            <p>{{mySchedules.status}} </p>
+                            <p class="ml-1">
+                                <CheckPending v-show="mySchedules.status === 'pendente'" height="h-6" width="w-6"/>
+                                <CheckSuccess v-show="mySchedules.status === 'finalizado'" height="h-6" width="w-6"/>
+                                <CheckCancel  v-show="mySchedules.status === 'cancelado'" height="h-6" width="w-6"/>
+                            </p>
                         </span>
                     </div>
                     <div class="flex ml-2">
@@ -64,19 +70,30 @@
 
 <script setup>
 import Main from '../Layouts/Main.vue';
-import { Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue'
+import CheckPending from '../Auth/components/icons/CheckPending.vue';
+import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
+import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
+import Modal from '../../components/Modal.vue'
 
 defineProps({
     mySchedules: Object
 })
 
 const page = usePage()
+const modal = ref(false)
 
 const dateAndHour = computed(() => {
     const created_at =  page.props.mySchedules.created_at
     const dataHora = created_at.split(" ");
     return dataHora;
 })
+
+
+const openModal = () => {
+    modal.value = true;
+};
+
 
 </script>

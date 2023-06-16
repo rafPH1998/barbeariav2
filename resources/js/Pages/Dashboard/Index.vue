@@ -55,9 +55,7 @@
                 </div>
                 <div class="bg-black/60 to-white/5 p-6 rounded-lg">
                     <div class="flex flex-row space-x-4 items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 stroke-yellow-500">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                        </svg>
+                        <CheckPending/>
                         <div>
                             <p class="text-yellow-300 text-sm font-medium uppercase leading-4">Agendas pendentes</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
@@ -68,9 +66,7 @@
                 </div>
                 <div class="bg-black/60 to-white/5 p-6 rounded-lg">
                     <div class="flex flex-row space-x-4 items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 stroke-green-500">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </svg>
+                        <CheckSuccess/>
                         <div>
                             <p class="text-green-500 text-sm font-medium uppercase leading-4">Agendas finalizadas</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
@@ -81,9 +77,7 @@
                 </div>
                 <div class="bg-black/60 to-white/5 p-6 rounded-lg">
                     <div class="flex flex-row space-x-4 items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 stroke-red-500">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <CheckCancel/>
                         <div>
                             <p class="text-red-500 text-sm font-medium uppercase leading-4">Agendas canceladas</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
@@ -100,4 +94,7 @@
 <script setup>
 import Main from '../Layouts/Main.vue';
 import Icon from '../../components/Icon.vue'
+import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
+import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
+import CheckPending from '../Auth/components/icons/CheckPending.vue';
 </script>

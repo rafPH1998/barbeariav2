@@ -16,13 +16,14 @@
                     :class="[
                         dropdown ? 'block' : 'hidden' 
                     ]"
-                    class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-200 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                    id="dropdown"
+                    class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-zinc-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                     <Link :href="route('profile.index')" 
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-600 hover:text-white" 
+                        class="block px-4 py-2 text-sm text-white hover:bg-zinc-700 hover:text-white"  
                         role="menuitem" tabindex="-1" id="user-menu-item-0">Meu perfil
                     </Link>
                     <Link :href="route('logout')"  method="POST"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-600 hover:text-white" 
+                        class="block px-4 py-2 text-sm text-white hover:bg-zinc-700 hover:text-white" 
                         role="menuitem" tabindex="-1" id="user-menu-item-1">Sair
                     </Link>
                 </div>
