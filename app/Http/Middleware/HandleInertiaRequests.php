@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
                 'dates' => fn () => $request->session()->get('dates'),
-                'user' => fn () => auth()->user()->loadCount('agenda')
+                'user' => fn () => auth()->check() ? auth()->user()->loadCount('agenda') : null
             ],
         ]);
     }
