@@ -36,12 +36,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        if (auth()->check()) {
+            $user = auth()->user()->withCount(['agenda' => function ($query) {
+                $query->where('status', 'pendente');
+            }])->first();
+        } 
+
         return array_merge(parent::share($request), [
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
                 'dates' => fn () => $request->session()->get('dates'),
-                'user' => fn () => auth()->check() ? auth()->user()->loadCount('agenda') : null
+                'user' => fn () => auth()->check() ? $user : null
             ],
         ]);
     }
