@@ -102,8 +102,8 @@
         router.post('/schedules', form, {
             onStart: () => (form.processing = true), 
             onFinish: () => {
+                router.get('/schedules/my-schedules')
                 if (page.props.flash.success) {
-                    router.get('/schedules/my-schedules')
                     toast.success(`Sucesso! ${page.props.flash.success} :)`)
                 }
                 form.processing = false

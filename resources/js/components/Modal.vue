@@ -52,7 +52,7 @@
                                         sm:ml-3 sm:w-auto">
                                         <sppiner-loading v-show="processing"/>
                                         <span v-if="processing">Cancelando...</span>
-                                        <span v-else>Cancelar</span>
+                                        <span v-else>Sim</span>
                                     </button>
             
                                     <button type="submit" 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,10 +38,11 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         if (auth()->check()) {
-            $user = auth()->user()->withCount(['agenda' => function ($query) {
+            $userId = auth()->user()->id;
+            $user = User::withCount(['agenda' => function ($query) {
                 $query->where('status', 'pendente');
-            }])->first();
-        } 
+            }])->find($userId);
+        }
 
         return array_merge(parent::share($request), [
             'flash' => [

@@ -37,6 +37,13 @@ class Schedule extends Model
         );
     }
 
+    protected function date(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d/m/Y')     
+        );
+    }
+
     protected function dayOfWeek(): Attribute
     {
         return Attribute::make(

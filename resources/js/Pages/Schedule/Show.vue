@@ -1,6 +1,5 @@
 <template>
     <Main>   
-
         <div v-if="mySchedules.length !== 0">
 
             <Modal 
@@ -99,11 +98,20 @@ import CheckPending from '../Auth/components/icons/CheckPending.vue';
 import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
 import Modal from '../../components/Modal.vue'
+import { useToast } from "vue-toastification";
+import { usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     mySchedules: Object,
     errors: Object
 })
+
+const toast = useToast();
+const page = usePage()
+
+if (page.props.flash.success) {
+    toast.success(`Sucesso! ${page.props.flash.success} :)`)
+}
 
 const idSchedulePending = props.mySchedules.filter(obj => obj.status === "pendente");
 const modal = ref(false)

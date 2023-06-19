@@ -19,7 +19,8 @@ class ScheduleController extends Controller
 
     public function index()
     {
-        return Inertia::render('Schedule/Index');
+        $schedules = $this->schedules->with('user')->paginate(10);
+        return Inertia::render('Schedule/List', ['schedules' => $schedules]);
     }
 
     public function typeForm()
@@ -125,6 +126,7 @@ class ScheduleController extends Controller
         $mySchedules = $this->schedules
                         ->leftJoin('canceleds', 'schedules.id', '=', 'canceleds.schedule_id')
                         ->select('schedules.*', 'canceleds.description')
+                        ->where('schedules.user_id', auth()->user()->id)
                         ->get();
                 
         return Inertia::render('Schedule/Show', ['mySchedules'=>$mySchedules]);
