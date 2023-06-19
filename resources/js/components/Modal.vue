@@ -27,26 +27,42 @@
                                 </div>
                             </div>
                             <hr class="my-2 border-red-500">
-                            <form action="#" 
-                                method="POST">
-                                <div class="flex mt-4"> 
-                                    <label for="description" class="block text-white text-sm">Motivo do<br>Cancelamento*:</label>
+                            <form @submit.prevent="cancelSchedule()" action="#"  method="POST">
+                                <div class="flex flex-col mt-4"> 
+                                    <label for="description" class="block text-gray-400 text-sm">Motivo do Cancelamento*:</label>
                                     <textarea rows="3"
+                                        @input="checkDescriptionLength()"
                                         v-model="description" 
-                                        class="block ml-2 p-2.5 w-full text-sm text-white
+                                        :class="[errors.description ? 'border border-1 border-red-500' : '']"
+                                        class="block p-2.5 w-full text-sm text-white
                                         bg-white/10 rounded-lg resize-none outline-none"
                                         placeholder="Escreva..."></textarea>
+                                    
                                 </div>
-                                <div class="flex flex-row-reverse text-white text-xs">
-                                    <p class="ml-10">(min 4 e max 100)</p>
-                                    <p class="mr-28">Total de caracteres:<span class="ml-1">{{countCaracteres}}</span></p>
+                                <p v-if="errors.description" class="text-xs text-red-500">{{ errors.description }}</p>
+
+                                <div class="flex flex-row-reverse text-gray-400 text-xs">
+                                    <p class="">Total: {{countCaracteres}} (min 4 e max 100)</p>
                                 </div>
-                            
+                                <div class="flex flex-row-reverse mt-10">
+                                    <button type="submit"
+                                        :disabled="processing"
+                                        class="inline-flex w-full justify-center rounded-md bg-green-600
+                                        px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 
+                                        sm:ml-3 sm:w-auto">
+                                        <sppiner-loading v-show="processing"/>
+                                        <span v-if="processing">Cancelando...</span>
+                                        <span v-else>Cancelar</span>
+                                    </button>
+            
+                                    <button type="submit" 
+                                        @click="$emit('closeModal', clearForm)"
+                                        class="inline-flex w-full justify-center rounded-md bg-red-600
+                                        px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 
+                                        sm:ml-3 sm:w-auto">Voltar
+                                    </button>
+                                </div>
                             </form>
-                        </div>
-                        <div class="bg-zinc-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                            <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Sim</button>
-                            <CheckCancel @click="$emit('closeModal')" />
                         </div>
                     </div>
                 </div>
@@ -56,11 +72,53 @@
 
 <script setup>
     import { ref, computed } from 'vue'
-    import CheckCancel from '../Pages/Auth/components/icons/CheckCancel.vue';
+    import { router, usePage } from '@inertiajs/vue3';
+    import SppinerLoading from './SppinerLoading.vue';
+    import { useToast } from "vue-toastification";
+
     const props = defineProps({
-        modal: Object
+        idSchedule: Number,
+        modal: Object,
+        errors: Object
     })
 
+    const page = usePage()
+    const toast = useToast();
     const description = ref('');
+    const processing = ref(false);
+    const qtMaxCharacters = ref(100);
+
+    const checkDescriptionLength = () => {
+        if (description.value.length > qtMaxCharacters.value) {
+            description.value = description.value.slice(0, qtMaxCharacters.value);
+        }
+    }
+
     const countCaracteres = computed(() => description.value.length)
+
+    const cancelSchedule = () => {
+        router.post('/schedules/canceleds', 
+            {
+                description: description.value,
+                id: props.idSchedule
+            }, 
+            {
+            onStart: () => (processing.value = true), 
+            onFinish: () => {
+                if (page.props.flash.success) {
+                    router.get('/schedules/my-schedules')
+                    toast.success(`Boa! ${page.props.flash.success} :)`)
+                }
+                processing.value = false
+                $emit('closeModal')
+            }
+        })
+    }
+
+    const clearForm = computed(() =>  {
+        description.value = ''
+        props.errors.description = ''
+        return;
+    })
+    
 </script>
