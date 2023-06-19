@@ -27,7 +27,8 @@ class CanceledsSchedule extends Controller
 
         Canceled::query()->create([
             'description' => $request->description,
-            'user_id'     => auth()->user()->id
+            'user_id'     => auth()->user()->id,
+            'schedule_id' => $schedule->id,
         ]);
 
         return redirect()

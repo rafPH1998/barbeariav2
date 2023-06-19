@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('canceleds', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete("CASCADE");
+            $table->foreignId('schedule_id')->constrained('schedules')->onDelete("CASCADE");
             $table->string('description');
             $table->timestamps();
         });

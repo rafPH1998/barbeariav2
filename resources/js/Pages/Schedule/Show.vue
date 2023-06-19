@@ -1,7 +1,7 @@
 <template>
     <Main>   
 
-        <div v-if="schedule !== null">
+        <div v-if="mySchedules.length !== 0">
 
             <Modal 
                 :modal="modal" 
@@ -66,7 +66,7 @@
                                 class="flex text-xs mt-6">
                                 <p class="font-bold">Motivo do cancelamento:</p>
                                 <span class="ml-2 text-gray-500">
-                                    dasdadasaddasdasdadsdasdasasasdasdasdas
+                                    {{ schedule.description }}
                                 </span>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
             </div>
         </div>
         <div v-else>
-            <p>sem agenda</p>
+            <p class="text-white">sem agenda</p>
         </div>
     </Main>
 </template>

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
@@ -51,7 +52,7 @@ class User extends Authenticatable
         );
     }
 
-    public function agenda()
+    public function agenda(): HasOne
     {
         return $this->hasOne(Schedule::class);
     }

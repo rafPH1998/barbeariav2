@@ -123,9 +123,10 @@ class ScheduleController extends Controller
     {
 
         $mySchedules = $this->schedules
-                    ->where('user_id', '=', auth()->user()->id)
-                    ->get();
-
+                        ->leftJoin('canceleds', 'schedules.id', '=', 'canceleds.schedule_id')
+                        ->select('schedules.*', 'canceleds.description')
+                        ->get();
+                
         return Inertia::render('Schedule/Show', ['mySchedules'=>$mySchedules]);
     }
 
