@@ -5,6 +5,7 @@ use App\Http\Controllers\{
     DashboardController,
     HomeController,
     ProfileController,
+    CanceledsSchedule,
     ScheduleController
 };
 
@@ -41,13 +42,17 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 Route::middleware('auth')->group(function() {
     Route::get('/schedules/my-schedules', [ScheduleController::class, 'mySchedules'])->name('schedules.mySchedules');
     Route::get('/schedules/type-service', [ScheduleController::class, 'typeForm'])->name('schedules.typeForm');
-
+    
     Route::get('/create/{type}', [ScheduleController::class, 'create'])
-        ->name('schedules.create')
-        ->where('type', 'corte|corte_barba');
-        
+    ->name('schedules.create')
+    ->where('type', 'corte|corte_barba');
+    
     Route::resource('/schedules', ScheduleController::class)->only(['index', 'store']);
+    
 }); 
+
+Route::post('/schedules/canceleds', CanceledsSchedule::class)->name('canceled');
+
 /*
 *Route para avaliacoes
 */

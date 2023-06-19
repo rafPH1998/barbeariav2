@@ -88,7 +88,6 @@ class ScheduleController extends Controller
         
         session()->put('dates', $getDates);
 
-        
         try {
             
             $horaCorte = Carbon::createFromFormat('H:i', $request->hour);
@@ -122,11 +121,11 @@ class ScheduleController extends Controller
 
     public function mySchedules()
     {
+
         $mySchedules = $this->schedules
                     ->where('user_id', '=', auth()->user()->id)
-                    ->first();
+                    ->get();
 
-                    //dd($mySchedules->dayOfWeek);
         return Inertia::render('Schedule/Show', ['mySchedules'=>$mySchedules]);
     }
 
