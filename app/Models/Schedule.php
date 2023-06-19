@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Schedule extends Model
 {
@@ -18,7 +19,7 @@ class Schedule extends Model
         'month_of_year',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -26,7 +27,13 @@ class Schedule extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('d/m/Y H:i')     
+            get: function ($value) {
+                $carbon = Carbon::parse($value);
+                $date = $carbon->format('d/m/Y');
+                $hour = $carbon->format('H:i');
+               
+                return "Agendado por você em {$date} às {$hour}";
+            }   
         );
     }
 
