@@ -6,7 +6,7 @@
             </div>
             <div>
                 <p class="font-medium group-hover:text-indigo-400 leading-4">{{ user.name }}</p>
-                <span class="text-xs text-slate-500">Cliente desde: {{ user.created_at }}</span>
+                <span class="text-xs text-gray-400 block uppercase tracking-wide font-light mb-1">Cliente desde: {{ user.created_at }}</span>
             </div>
         </a>
         <hr class="my-2 border-slate-700">

@@ -1,5 +1,5 @@
 <template>
-    <label :for="name" class="leading-7 text-sm text-white">{{ label }}</label>
+    <label :for="name" class="block uppercase tracking-wide text-gray-300 text-xs font-light mb-1">{{ label }}</label>
     <div class="flex">
      <input 
         :modelValue="modelValue"
@@ -11,9 +11,7 @@
         :class="[
             error ? 'border border-1 border-red-500' : ''
         ]"
-         class="bg-white/10 shadow-lg 
-                appearance-none rounded w-full py-2 px-3 text-white 
-                leading-tight focus:outline-none focus:shadow-outline"
+         class="bg-transparent appearance-none rounded w-full py-2 px-3 text-gray-400 border-collapse border border-gray-700 focus:outline-none"
         >
         <p v-show="props.type === 'password'" @click="togglePassword()" 
             class="-ml-8 flex items-center cursor-pointer 
@@ -24,7 +22,7 @@
             <IconClosePassword v-if="showPassword" />
         </p>
     </div>
-     <span class="text-red-600 text-xs" v-if="error">{{ error }}</span>
+    <span class="text-red-600 text-xs" v-if="error">{{ error }}</span>
  </template>
    
  <script setup>
