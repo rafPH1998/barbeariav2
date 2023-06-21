@@ -22,9 +22,6 @@
                         py-2 px-3 text-gray-400 border-collapse border border-gray-700 
                         focus:outline-none">
                     <span class="text-red-600 text-xs" v-if="errors.image">{{errors.image}}</span>
-                    <div v-if="form.progress > 0" class="relative h-2 rounded bg-gray-300 mt-2">
-                        <div class="absolute h-2 rounded bg-blue-500" :style="{ width: form.progress + '%' }"></div>
-                    </div>
                 </div>
 
                 <div class="flex flex-wrap -mx-3 mb-6 mt-2">
@@ -95,6 +92,7 @@ const form = reactive({
     password: props.user.password,
     password_confirmation: null,
     image: null,
+    progress: 0,
     previewImage: null,
     processing: false
 })

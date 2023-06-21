@@ -21,7 +21,11 @@
                         <tbody v-for="schedule in schedules.data" :key="schedule.id">
                             <tr class="border-b border-gray-700 text-center">
                                 <td class="py-3 px-2 flex justify-center">
-                                    <img class="h-8 w-8 rounded-full" src="/assets/images/user.svg">
+                                    <img class="h-8 w-8 rounded-full" 
+                                        :src="[
+                                            schedule.user.image ? '/storage/' + schedule.user.image : '/assets/images/user.svg'
+                                        ]"
+                                    >
                                 </td>
                                 <td class="py-3 px-2">{{schedule.user.name}}</td>
                                 <td class="py-3 px-2">{{schedule.user.email}}</td>

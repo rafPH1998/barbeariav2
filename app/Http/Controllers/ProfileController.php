@@ -30,16 +30,16 @@ class ProfileController extends Controller
             $data['image'] = $request->image->store('users');
         }
 
-        if ($request->password && !$request->password_confirmation) {
-            return redirect()->route('profile.index')->with('error', 'Você precisa preenche confirmar a sua senha para altera-la!');
-        } 
-
-        if ($request->password !== $request->password_confirmation) {
-            return redirect()->route('profile.index')->with('error', 'As senhas não correspondem!');
+        if ($request->password) {
+            if ($request->password && !$request->password_confirmation) {
+                return redirect()->route('profile.index')->with('error', 'Você precisa preenche confirmar a sua senha para altera-la!');
+            } 
+            if ($request->password !== $request->password_confirmation) {
+                return redirect()->route('profile.index')->with('error', 'As senhas não correspondem!');
+            } 
+            $data['password'] = bcrypt($request->password);
         }
-
-        $data['password'] = bcrypt($request->password);
-
+  
         User::query()
             ->where('id', '=', auth()->user()->id)
             ->update($data);
