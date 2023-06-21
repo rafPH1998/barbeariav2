@@ -32,6 +32,12 @@ class EditProfile extends FormRequest
                 'max:100',
                 Rule::unique('users')->ignore($authUser),
             ],
+            'image' => [
+                'nullable',
+                'mimes:png,jpg,jpeg',
+                'image',
+                'max: 1024',
+            ],
             'email' => [
                 'required',
                 'email',

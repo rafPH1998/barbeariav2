@@ -61,4 +61,6 @@ Route::resource('/assessments', AssessmentsController::class)->only(['index', 's
 /*
 *Route para perfil
 */
-Route::resource('/profile', ProfileController::class)->only(['index', 'update']);
+Route::post('/profile', [ProfileController::class, 'store']);
+Route::resource('/profile', ProfileController::class)->only('index');
+

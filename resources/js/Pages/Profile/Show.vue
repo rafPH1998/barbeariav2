@@ -6,24 +6,29 @@
                 @submit.prevent="submitForm()"
                 class="border-collapse border border-gray-700
                 rounded px-8 pt-6 pb-8 mb-8 m-8"
-                enctype="multipart/form-data">
-
+                >
                 <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 flex items-center">
-                    <img class="h-32 w-32 rounded-full" src="/assets/images/user.svg">
+                    <img
+                        class="h-32 w-32 rounded-full"
+                        :src="[form.previewImage || (props.user.image ? '/storage/' + props.user.image : '/assets/images/user.svg')]"
+                    >
                 </div>
-
+                    
                 <div class="relative">
-                    <Input  
-                        v-model="form.image"
-                        label="Foto" 
-                        name="image" 
-                        type="file" 
-                        @input="form.image = $event.target.files[0]" 
-                    />
+                    <label for="image" class="block uppercase tracking-wide text-gray-300 text-xs font-light mb-1">Foto</label>
+                    <input type="file" 
+                        @input="handleImageUpload($event)"
+                        class="bg-transparent appearance-none rounded w-full
+                        py-2 px-3 text-gray-400 border-collapse border border-gray-700 
+                        focus:outline-none">
+                    <span class="text-red-600 text-xs" v-if="errors.image">{{errors.image}}</span>
+                    <div v-if="form.progress > 0" class="relative h-2 rounded bg-gray-300 mt-2">
+                        <div class="absolute h-2 rounded bg-blue-500" :style="{ width: form.progress + '%' }"></div>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap -mx-3 mb-6 mt-2">
-                    <Input  
+                    <input-profile
                         v-model="form.name"
                         label="Nome" 
                         name="name" 
@@ -31,7 +36,7 @@
                         :error="errors.name"
                     />
                 
-                    <Input  
+                    <input-profile  
                     v-model="form.email"
                         label="E-mail" 
                         name="email" 
@@ -39,7 +44,7 @@
                         :error="errors.email"
                     />
 
-                    <Input  
+                    <input-profile  
                         v-model="form.password"
                         label="Senha" 
                         name="password" 
@@ -47,7 +52,7 @@
                         :error="errors.password"
                     />
 
-                    <Input  
+                    <input-profile  
                         v-model="form.password_confirmation"
                         label="Confirme senha" 
                         name="password_confirmation" 
@@ -69,7 +74,7 @@
 <script setup>
 import Main from '../Layouts/Main.vue';
 import { usePage, router } from '@inertiajs/vue3'
-import Input from './components/Input.vue';
+import InputProfile from './components/InputProfile.vue';
 import ButtonForm from '../Auth/components/ButtonForm.vue';
 import SppinerLoading from '../../components/SppinerLoading.vue';
 import { useToast } from "vue-toastification";
@@ -90,11 +95,13 @@ const form = reactive({
     password: props.user.password,
     password_confirmation: null,
     image: null,
+    previewImage: null,
     processing: false
 })
 
 const submitForm = () => {
-    router.put(`/profile/${form.id}`, form, {
+    
+    router.post(`/profile`, form, {
         onStart: () => (form.processing = true), 
         onFinish: () => {
             
@@ -111,5 +118,19 @@ const submitForm = () => {
         }
     })
 }
+
+const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            form.previewImage = reader.result;
+        };
+        reader.readAsDataURL(file);
+        form.image = file;
+    }
+}
+
 
 </script>

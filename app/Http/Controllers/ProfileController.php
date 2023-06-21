@@ -19,19 +19,16 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditProfile $request, string $id)
+    public function store(EditProfile $request)
     {
         $data = $request->only(['name', 'email']);
 
-        /* if ($request->image) {
+        if ($request->image) {
             if ($request->image && Storage::exists($request->image)) {
                 Storage::delete($request->image);
             }
             $data['image'] = $request->image->store('users');
         }
-     */
-
-        //dd($request->all());
 
         if ($request->password && !$request->password_confirmation) {
             return redirect()->route('profile.index')->with('error', 'Você precisa preenche confirmar a sua senha para altera-la!');
@@ -44,7 +41,7 @@ class ProfileController extends Controller
         $data['password'] = bcrypt($request->password);
 
         User::query()
-            ->where('id', '=', $id)
+            ->where('id', '=', auth()->user()->id)
             ->update($data);
 
         return redirect()->route('profile.index')->with('success', 'Dados do perfil atualizados com sucesso!');

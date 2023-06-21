@@ -2,7 +2,10 @@
     <div id="menu" class="bg-white/10 col-span-3 rounded-lg p-4 ">
         <a href="#" class="flex flex-col space-y-2 md:space-y-0 md:flex-row mb-5 items-center md:space-x-2 hover:bg-white/10 group transition duration-150 ease-linear rounded-lg group w-full py-3 px-2">
             <div>
-                <img class="h-10 w-10 rounded-full relative object-cover" src="/assets/images/user.svg">
+                <img class="h-10 w-10 rounded-full relative object-cover" 
+                    :src="[
+                        user.image ? '/storage/' + user.image : '/assets/images/user.svg'
+                    ]">
             </div>
             <div>
                 <p class="font-medium group-hover:text-indigo-400 leading-4">{{ user.name }}</p>
