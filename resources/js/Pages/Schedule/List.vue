@@ -44,20 +44,23 @@
                                 <td class="py-3 px-2">{{schedule.hour}}</td>
                                 <td class="py-3 px-2">{{schedule.end_service}}</td>
                                 <td class="py-3 px-2">
-                                <a 
-                                    @click.prevent="openModal()"
-                                    v-if="schedule.status === 'pendente'"
-                                    type="button"
-                                    class="bg-red-600 hover:bg-red-700
-                                    font-bold rounded-full text-center w-full
-                                    text-white text-xs cursor-pointer">
-                                    Cancelar
-                                </a>
+                                    <a 
+                                        @click.prevent="openModal()"
+                                        v-if="schedule.status === 'pendente'"
+                                        type="button"
+                                        class="bg-red-600 hover:bg-red-700
+                                        font-bold rounded-full text-center w-full
+                                        text-white text-xs cursor-pointer">
+                                        Cancelar
+                                    </a>
                                 </td>
                             </tr> 
                         </tbody>                       
                     </table>
                 </div>
+            </div>
+            <div class="flex flex-row-reverse mt-5">
+                <Pagination :data="schedules"/>
             </div>
         </Main>
      </div>
@@ -68,9 +71,10 @@ import Main from '../Layouts/Main.vue';
 import CheckPending from '../Auth/components/icons/CheckPending.vue';
 import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
+import Pagination from '../../components/Pagination.vue';
 
  const props = defineProps({
      schedules: Object
  })
  
- </script>
+</script>
