@@ -17,13 +17,14 @@ class ScheduleController extends Controller
         protected Schedule $schedules
     ){ }
 
-    public function index()
+    public function index(Request $request)
     {
-        $schedules = $this->schedules
-                    ->with('user:id,name,image')
-                    ->paginate(10);
+        $schedules = $this->schedules->getSchedules(status: $request->status ?? '');
 
-        return Inertia::render('Schedule/List', ['schedules' => $schedules]);
+        return Inertia::render('Schedule/List', [
+            'schedules' => $schedules, 
+            'status' => $request->status
+        ]);
     }
 
     public function typeForm()

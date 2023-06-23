@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Schedule extends Model
@@ -124,4 +125,16 @@ class Schedule extends Model
     
         return $novosHorarios;
     }
+
+    public function getSchedules(?string $status)
+    {
+
+        return $this
+                ->when($status == 'pendente' || $status == null, fn($query) => $query->where('status', '=', 'pendente'))
+                ->when($status == 'finalizado', fn($query) => $query->where('status', '=', 'finalizado'))
+                ->when($status == 'cancelado', fn($query) => $query->where('status', '=', 'cancelado'))
+                ->with('user:id,name,image')
+                ->paginate(5);
+    }
+
 }

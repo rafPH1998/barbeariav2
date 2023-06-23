@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -42,6 +43,8 @@ class HandleInertiaRequests extends Middleware
             $user = User::withCount(['agenda' => function ($query) {
                 $query->where('status', 'pendente');
             }])->find($userId);
+
+            $countSchedules = Schedule::where('status', '=', 'pendente')->get();
         }
 
         return array_merge(parent::share($request), [
@@ -49,7 +52,8 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
                 'dates' => fn () => $request->session()->get('dates'),
-                'user' => fn () => auth()->check() ? $user : null
+                'user' => fn () => auth()->check() ? $user : null,
+                'countSchedules' => $countSchedules
             ],
         ]);
     }

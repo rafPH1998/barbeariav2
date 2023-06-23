@@ -55,7 +55,7 @@
                         <p class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400 ml-4">Agendas do dia</p>
                     </div>
                     <div class="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 p-1 rounded-full bg-indigo-800 text-xs font-mono font-bold">
-                        {{ user.agenda_count }}
+                        {{ countSchedules.length }}
                     </div>
                 </div>
             </Link>
@@ -126,5 +126,6 @@ import { computed } from 'vue'
 
 const page = usePage()
 const user = computed(() => page.props.flash.user)
+const countSchedules = computed(() => page.props.flash.countSchedules)
 
 </script>

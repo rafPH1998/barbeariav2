@@ -22,21 +22,22 @@
                     </form>
                     <div>
                         <ul class="flex">
-                            <li @click="selectStatus('finalizado')" 
-                                :class="{ 'bg-indigo-600': status === 'finalizado' }"
-                                class="border-collapse border border-indigo-500 text-xs rounded-full 
-                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Finalizados
-                            </li>
                             <li @click="selectStatus('pendente')" 
-                                :class="{ 'bg-indigo-600': status === 'pendente' }"
-                                class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
+                                :class="{ 'bg-indigo-600': props.status === 'pendente' || props.status == null}"
+                                class="border-collapse border border-indigo-500 text-xs rounded-full 
                                 px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Pendentes
                             </li>
+                            <li @click="selectStatus('finalizado')" 
+                                :class="{ 'bg-indigo-600': props.status === 'finalizado' }"
+                                class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
+                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Finalizados
+                            </li>
                             <li @click="selectStatus('cancelado')" 
-                                :class="{ 'bg-indigo-600': status === 'cancelado' }"
+                                :class="{ 'bg-indigo-600': props.status === 'cancelado' }"
                                 class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
                                 px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Cancelados
                             </li>
+                            <p class="text-white">{{ status }}</p>
                         </ul>
                     </div>
                 </div>
@@ -109,19 +110,18 @@ import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
 import Pagination from '../../components/Pagination.vue';
 import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
-    schedules: Object
+    schedules: Object,
+    status: String
 })
 
-console.log(props)
-
-const status = ref('')
+const status = ref('');
 
 const selectStatus = (selectedStatus) => {
-  status.value = selectedStatus;
-  alert(`STATUS ${status.value}`);
-}
+    router.get('/schedules', {status: selectedStatus });
+};
 
 const date = ref('')
 
