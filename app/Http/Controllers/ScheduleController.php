@@ -20,8 +20,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $schedules = $this->schedules
-                    ->with('user')
-                    ->where('status', '=', 'pendente')
+                    ->with('user:id,name,image')
                     ->paginate(10);
 
         return Inertia::render('Schedule/List', ['schedules' => $schedules]);
