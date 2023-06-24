@@ -77,9 +77,27 @@
                                     </p>
                                 </div>
                                 </td>                          
-                                <td class="py-3 px-2">{{schedule.date}}</td>
-                                <td class="py-3 px-2">{{schedule.hour}}</td>
-                                <td class="py-3 px-2">{{schedule.end_service}}</td>
+                                <td 
+                                    :class="{
+                                        'line-through text-gray-500': schedule.status === 'finalizado', 
+                                        'line-through text-red-500': schedule.status === 'cancelado'
+                                    }" 
+                                    class="py-3 px-2">{{schedule.date}}
+                                </td>
+
+                                <td :class="{
+                                        'line-through text-gray-500': schedule.status === 'finalizado', 
+                                        'line-through text-red-500': schedule.status === 'cancelado'
+                                    }" 
+                                    class="py-3 px-2">{{schedule.hour}}
+                                </td>
+
+                                <td :class="{
+                                        'line-through text-gray-500': schedule.status === 'finalizado', 
+                                        'line-through text-red-500': schedule.status === 'cancelado'
+                                    }" 
+                                    class="py-3 px-2">{{schedule.end_service}}
+                                </td>
                                 <td class="py-3 px-2">
                                     <a 
                                         @click.prevent="openModal()"

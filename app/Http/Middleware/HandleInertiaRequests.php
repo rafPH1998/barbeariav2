@@ -53,7 +53,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
                 'dates' => fn () => $request->session()->get('dates'),
                 'user' => fn () => auth()->check() ? $user : null,
-                'countSchedules' => $countSchedules
+                'countSchedules' => auth()->check() ? $countSchedules : null
             ],
         ]);
     }

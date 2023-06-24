@@ -51,7 +51,8 @@
                     </div>
                     <span v-if="errors.hour" class="text-red-600 text-xs ml-2">{{errors.hour}}</span>
 
-                    <button-form @click.prevent="storeSchedule()" :loader="form.processing || schedules">
+                    <button-form @click.prevent="storeSchedule()" 
+                        :loader="form.processing || schedules || !form.date || !form.hour">
                         <sppiner-loading v-show="form.processing"/>
                         <span v-if="form.processing">Agendando...</span>
                         <span v-else>Agendar</span>
