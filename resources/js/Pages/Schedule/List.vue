@@ -37,7 +37,6 @@
                                 class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
                                 px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Cancelados
                             </li>
-                            <p class="text-white">{{ status }}</p>
                         </ul>
                     </div>
                 </div>
@@ -115,9 +114,12 @@
                 </div>
             </div>
             <div class="flex flex-row-reverse mt-5">
-                <Pagination :data="schedules"/>
+                <Pagination 
+                    :data="schedules"
+                    @changePage="changePage"
+                />
             </div>
-        </Main>
+        </Main> 
      </div>
  </template>
  
@@ -135,11 +137,16 @@ const props = defineProps({
     status: String
 })
 
-const status = ref('');
-
 const selectStatus = (selectedStatus) => {
     router.get('/schedules', {status: selectedStatus });
 };
+
+const changePage = (page) => {
+    router.get('/schedules', {
+        status: props.status,
+        page
+    });
+}
 
 const date = ref('')
 

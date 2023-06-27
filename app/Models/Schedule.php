@@ -129,12 +129,14 @@ class Schedule extends Model
     public function getSchedules(?string $status)
     {
 
-        return $this
+        $query = $this
                 ->when($status == 'pendente' || $status == null, fn($query) => $query->where('status', '=', 'pendente'))
                 ->when($status == 'finalizado', fn($query) => $query->where('status', '=', 'finalizado'))
                 ->when($status == 'cancelado', fn($query) => $query->where('status', '=', 'cancelado'))
                 ->with('user:id,name,image')
-                ->paginate(5);
+                ->orderBy('date', 'ASC');
+
+        return $query->paginate(8);
     }
 
 }
