@@ -90,10 +90,10 @@
     const minDate = ref(null)
 
     const form = reactive({
-        date       : null,
-        hour       : null,
-        processing : false,
-        type       : page.props.service
+        date: null,
+        hour: null,
+        processing: false,
+        type: page.props.service
     })
     const getDates = () => router.post('/schedules', form)
     const chooseDate = (hourSelected) => form.hour = hourSelected

@@ -116,8 +116,5 @@ if (page.props.flash.success) {
 const idSchedulePending = props.mySchedules.filter(obj => obj.status === "pendente");
 const modal = ref(false)
 
-const openModal = () => {
-    modal.value = true;
-};
-
+const openModal = () => modal.value = true
 </script>

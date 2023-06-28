@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Schedule extends Model
 {
@@ -81,58 +82,64 @@ class Schedule extends Model
     
     public function hoursAvailable(array $datasEnums, string $data)
     {
-        $ocupados = $this->whereDate('date', '=', $data)
+        //captura horarios que estao ocupados
+        $busy = $this->whereDate('date', '=', $data)
                         ->pluck('hour')
                         ->toArray();
 
         if ($data > now()->format('Y-m-d')) {
-            $novosHorarios = $this->hoursAvailableFuture($datasEnums, $ocupados);
+            $newHours = $this->hoursAvailableFuture($datasEnums, $busy);
         } else {
-            $novosHorarios = $this->hoursAvailableToday($datasEnums, $ocupados);
+            $newHours = $this->hoursAvailableToday($datasEnums, $busy);
         }
                 
-        return $novosHorarios;
+        return $newHours;
     }
 
-    protected function hoursAvailableFuture(array $datasEnums, array $ocupados)
+    protected function hoursAvailableFuture(array $datasEnums, array $busy)
     {
-        $novosHorarios = [];
+        $newHours = [];
     
         foreach ($datasEnums as $case) {
-            $valor = $case->value;
-            if (!in_array($valor, $ocupados)) {
-                $novosHorarios[] = $valor;
+            $resultHours = $case->value;
+            if (!in_array($resultHours, $busy)) {
+                $newHours[] = $resultHours;
             }
         }
     
-        return $novosHorarios;
+        return $newHours;
     }
     
-    protected function hoursAvailableToday(array $datasEnums, array $ocupados)
+    protected function hoursAvailableToday(array $datasEnums, array $busy)
     {
-        $horariosDisponiveis = collect($datasEnums)->filter(function ($hora) {
+        $availableTimes = collect($datasEnums)->filter(function ($hora) {
             return $hora->value > now()->format('H:i');
         })->values()->toArray();
     
-        $novosHorarios = [];
+        $newHours = [];
     
-        foreach ($horariosDisponiveis as $case) {
-            $valor = $case->value;
-            if (!in_array($valor, $ocupados)) {
-                $novosHorarios[] = $valor;
+        foreach ($availableTimes as $case) {
+            $resultHours = $case->value;
+            if (!in_array($resultHours, $busy)) {
+                $newHours[] = $resultHours;
             }
         }
     
-        return $novosHorarios;
+        return $newHours;
     }
 
     public function getSchedules(?string $status)
     {
-
         $query = $this
                 ->when($status == 'pendente' || $status == null, fn($query) => $query->where('status', '=', 'pendente'))
                 ->when($status == 'finalizado', fn($query) => $query->where('status', '=', 'finalizado'))
                 ->when($status == 'cancelado', fn($query) => $query->where('status', '=', 'cancelado'))
+                ->select('*', 
+                    DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente") AS count_pending'),
+                    DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "finalizado") AS count_finished'),
+                    DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado") AS count_canceleds'),
+                    DB::raw('(SELECT description FROM canceleds WHERE canceleds.schedule_id = schedules.id) AS cancellation_reason')
+                )
                 ->with('user:id,name,image')
                 ->orderBy('date', 'ASC');
 

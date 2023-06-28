@@ -25,17 +25,17 @@
                             <li @click="selectStatus('pendente')" 
                                 :class="{ 'bg-indigo-600': props.status === 'pendente' || props.status == null}"
                                 class="border-collapse border border-indigo-500 text-xs rounded-full 
-                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Pendentes
+                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Pendentes ({{props.schedules.data[0].count_pending}})
                             </li>
                             <li @click="selectStatus('finalizado')" 
                                 :class="{ 'bg-indigo-600': props.status === 'finalizado' }"
                                 class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
-                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Finalizados
+                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Finalizados ({{props.schedules.data[0].count_finished}})
                             </li>
                             <li @click="selectStatus('cancelado')" 
                                 :class="{ 'bg-indigo-600': props.status === 'cancelado' }"
                                 class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
-                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Cancelados
+                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Cancelados ({{props.schedules.data[0].count_canceleds}})
                             </li>
                         </ul>
                     </div>
@@ -52,12 +52,14 @@
                                 <th class="py-3 px-2">Dia do agendamento</th>
                                 <th class="py-3 px-2">Início</th>
                                 <th class="py-3 px-2">Término</th>
-                                <th class="py-3 px-2 rounded-r-lg">Ação</th>
+                                <th class="py-3 px-2 rounded-r-lg">{{nameColumn}}</th>
                             </tr>                          
                         </thead>
                         <tbody v-for="schedule in schedules.data" :key="schedule.id">
                             <tr class="border-b border-gray-700 text-center">
-                                <td class="py-3 px-2 flex justify-center">
+                                <td 
+                                    :class="{'py-12': schedule.cancellation_reason}"
+                                    class="py-3 px-2 flex justify-center">
                                     <img class="h-8 w-8 rounded-full" 
                                         :src="[
                                             schedule.user.image ? '/storage/' + schedule.user.image : '/assets/images/user.svg'
@@ -97,16 +99,20 @@
                                     }" 
                                     class="py-3 px-2">{{schedule.end_service}}
                                 </td>
-                                <td class="py-3 px-2">
+                                <td class="py-3 px-2" v-if="schedule.status === 'pendente'">
                                     <a 
                                         @click.prevent="openModal()"
-                                        v-if="schedule.status === 'pendente'"
                                         type="button"
                                         class="bg-red-600 hover:bg-red-700
                                         font-bold rounded-full text-center w-full
                                         text-white text-xs cursor-pointer">
                                         Cancelar
                                     </a>
+                                </td>
+                                <td class="py-12" v-show="nameColumn == 'Motivo do cancelamento'">
+                                    <p class="text-indigo-500 font-medium text-xs  whitespace-pre-line"> 
+                                        {{schedule.cancellation_reason}}
+                                    </p>
                                 </td>
                             </tr> 
                         </tbody>                       
@@ -129,12 +135,23 @@ import CheckPending from '../Auth/components/icons/CheckPending.vue';
 import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
 import Pagination from '../../components/Pagination.vue';
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
     schedules: Object,
     status: String
+})
+
+const nameColumn = computed(() => {
+    const pendings = props.schedules.data.filter(obj => obj.status === 'pendente')
+    const cancelds = props.schedules.data.filter(obj => obj.status === 'cancelado')
+
+    if (pendings.length !== 0) {
+        return 'Ação'
+    } else if(cancelds.length !== 0) {
+        return 'Motivo do cancelamento'
+    }
 })
 
 const selectStatus = (selectedStatus) => {
