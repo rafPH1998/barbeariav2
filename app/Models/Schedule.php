@@ -62,11 +62,13 @@ class Schedule extends Model
     protected function monthOfYear(): Attribute
     {
         return Attribute::make(
-            get: function ($value) {
-                $date = Carbon::parse($value);
+            get: function () {
+                $date = Carbon::createFromFormat('d/m/Y', $this->date);
                 $day = $date->format('d');
                 $month = strtoupper($date->shortEnglishMonth);
                 $year = $date->format('Y');
+
+
                 return "{$day}/{$month}/{$year}";
             }
         );

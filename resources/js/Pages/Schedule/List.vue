@@ -1,6 +1,13 @@
 <template>
     <div>
         <Main>
+            <Modal 
+                :modal="modal" 
+                :errors="errors" 
+                :objectUserSelected="objectUserSelected"
+                @closeModal="modal = false" 
+            />
+
             <div id="last-users mt-10">
                 <h1 class="font-bold py-4 uppercase">Tabela de agendamentos</h1>
 
@@ -101,7 +108,7 @@
                                 </td>
                                 <td class="py-3 px-2" v-if="schedule.status === 'pendente'">
                                     <a 
-                                        @click.prevent="openModal()"
+                                        @click.prevent="openModal(schedule)"
                                         type="button"
                                         class="bg-red-600 hover:bg-red-700
                                         font-bold rounded-full text-center w-full
@@ -135,13 +142,19 @@ import CheckPending from '../Auth/components/icons/CheckPending.vue';
 import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
 import Pagination from '../../components/Pagination.vue';
+import Modal from '../../components/Modal.vue'
 import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
     schedules: Object,
-    status: String
+    errors: Object,
+    status: String,
 })
+
+const date = ref('')
+const modal = ref(false)
+const objectUserSelected = ref('')
 
 const nameColumn = computed(() => {
     const pendings = props.schedules.data.filter(obj => obj.status === 'pendente')
@@ -165,7 +178,10 @@ const changePage = (page) => {
     });
 }
 
-const date = ref('')
+const openModal = (obj) => { 
+    modal.value = true
+    objectUserSelected.value = obj
+}
 
 const formatDate = (event) => {
     const input = event.target;

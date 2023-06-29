@@ -12,7 +12,7 @@
             <p class="text-white">Minhas agendas</p>
          
             <div 
-                v-for="schedule in mySchedules" :key="schedule.id"
+                v-for="schedule in mySchedules.data" :key="schedule.id"
                 :class="[
                     schedule.status === 'finalizado' 
                     ||
@@ -87,6 +87,12 @@
         <div v-else>
             <p class="text-white">sem agenda</p>
         </div>
+        <div class="flex flex-row-reverse mt-5">
+            <Pagination 
+                :data="mySchedules"
+                @changePage="changePage"
+            />
+        </div>
     </Main>
 </template>
 
@@ -97,9 +103,10 @@ import { ref } from 'vue'
 import CheckPending from '../Auth/components/icons/CheckPending.vue';
 import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
+import Pagination from '../../components/Pagination.vue';
 import Modal from '../../components/Modal.vue'
 import { useToast } from "vue-toastification";
-import { usePage } from '@inertiajs/vue3';
+import { usePage, router } from '@inertiajs/vue3';
 
 const props = defineProps({
     mySchedules: Object,
@@ -113,7 +120,12 @@ if (page.props.flash.success) {
     toast.success(`Sucesso! ${page.props.flash.success} :)`)
 }
 
-const idSchedulePending = props.mySchedules.filter(obj => obj.status === "pendente");
+const changePage = (page) => {
+    router.get('/schedules/my-schedules', {
+        page
+    });
+}
+const idSchedulePending = props.mySchedules.data.filter(obj => obj.status === "pendente");
 const modal = ref(false)
 
 const openModal = () => modal.value = true

@@ -21,7 +21,8 @@
                                     <h3 class="text-base font-bold leading-6 text-white" id="modal-title">Cancelar agenda</h3>
                                     <div class="mt-2">
                                         <p class="text-sm text-white">
-                                            Tem certeza que deseja deletar sua agenda ?
+                                            <span v-if="objectUserSelected">Tem certeza que deseja deletar do usuario {{objectUserSelected.user.name}} ?</span>
+                                            <span v-else>Tem certeza que deseja deletar sua agenda ?</span>
                                         </p>
                                     </div>
                                 </div>
@@ -33,13 +34,11 @@
                                     <textarea rows="3"
                                         @input="checkDescriptionLength()"
                                         v-model="description" 
-                                        :class="[errors.description ? 'border border-1 border-red-500' : '']"
-                                        class="block p-2.5 w-full text-sm text-white
-                                        bg-white/10 rounded-lg resize-none outline-none"
+                                        :class="[errors && errors.description ? 'border border-1 border-red-500' : '']"
+                                        class="block p-2.5 w-full text-sm text-white bg-white/10 rounded-lg resize-none outline-none"
                                         placeholder="Escreva..."></textarea>
-                                    
                                 </div>
-                                <p v-if="errors.description" class="text-xs text-red-500">{{ errors.description }}</p>
+                                <p v-if="errors && errors.description" class="text-xs text-red-500">{{ errors.description }}</p>
 
                                 <div class="flex flex-row-reverse text-gray-400 text-xs">
                                     <p class="">Total: {{countCaracteres}} (min 4 e max 100)</p>
@@ -70,55 +69,89 @@
         </div>
 </template>
 
-<script setup>
-    import { ref, computed } from 'vue'
-    import { router, usePage } from '@inertiajs/vue3';
-    import SppinerLoading from './SppinerLoading.vue';
-    import { useToast } from "vue-toastification";
 
-    const props = defineProps({
-        idSchedule: Number,
-        modal: Object,
-        errors: Object
-    })
 
-    const page = usePage()
-    const toast = useToast();
-    const description = ref('');
-    const processing = ref(false);
-    const qtMaxCharacters = ref(100);
-
-    const checkDescriptionLength = () => {
-        if (description.value.length > qtMaxCharacters.value) {
-            description.value = description.value.slice(0, qtMaxCharacters.value);
+<script>
+import { ref, computed } from 'vue'
+import { router, usePage } from '@inertiajs/vue3';
+import SppinerLoading from './SppinerLoading.vue';
+import { useToast } from "vue-toastification";
+export default {
+    props: {
+        idSchedule: {
+            type: Number
+        },
+        objectUserSelected: {
+            type: Object
+        },
+        modal: {
+            type: Object
+        },
+        errors: {
+            type: Object
         }
-    }
+    },
+    components: {
+        SppinerLoading
+    },
 
-    const countCaracteres = computed(() => description.value.length)
+    setup(props, { emit }) {
 
-    const cancelSchedule = () => {
-        router.post('/schedules/canceleds', 
-            {
-                description: description.value,
-                id: props.idSchedule
-            }, 
-            {
-            onStart: () => (processing.value = true), 
-            onFinish: () => {
-                if (page.props.flash.success) {
-                    router.get('/schedules/my-schedules')
-                    toast.success(`Boa! ${page.props.flash.success} :)`)
-                }
-                processing.value = false
-                $emit('closeModal')
+        const page = usePage()
+        const toast = useToast();
+        const description = ref('');
+        const processing = ref(false);
+        const qtMaxCharacters = ref(100);
+
+        const checkDescriptionLength = () => {
+            if (description.value.length > qtMaxCharacters.value) {
+                description.value = description.value.slice(0, qtMaxCharacters.value);
             }
-        })
-    }
+        }
 
-    const clearForm = computed(() =>  {
-        description.value = ''
-        props.errors.description = ''
-        return;
-    })
-    
+        const countCaracteres = computed(() => description.value.length)
+
+        const cancelSchedule = () => {
+            const filledId = props.idSchedule || (props.objectUserSelected ? props.objectUserSelected.id : null);
+            const route = filledId === props.idSchedule ? '/schedules/my-schedules' : '/schedules';
+
+            router.post('/schedules/canceleds', 
+                {
+                    description: description.value,
+                    id: filledId
+                }, 
+                {
+                onStart: () => (processing.value = true), 
+                onFinish: () => {
+                    if (page.props.flash.success) {
+                        router.get(route)
+                        toast.success(`Boa! ${page.props.flash.success} :)`)
+                        emit('closeModal')
+                    }
+                    processing.value = false
+                }
+            })
+        }
+
+        const clearForm = computed(() =>  {
+            if (description.value) {
+                description.value = ''
+                props.errors.description = ''
+                return;
+            }
+
+        })
+
+        return {
+            clearForm,
+            countCaracteres,
+            cancelSchedule,
+            processing,
+            description,
+            checkDescriptionLength
+        }
+    },
+};
+
 </script>
+

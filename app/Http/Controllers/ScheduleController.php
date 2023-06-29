@@ -131,7 +131,7 @@ class ScheduleController extends Controller
                         ->leftJoin('canceleds', 'schedules.id', '=', 'canceleds.schedule_id')
                         ->select('schedules.*', 'canceleds.description')
                         ->where('schedules.user_id', auth()->user()->id)
-                        ->get();
+                        ->paginate(3);
                 
         return Inertia::render('Schedule/Show', ['mySchedules'=>$mySchedules]);
     }
