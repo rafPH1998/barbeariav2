@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
@@ -20,9 +21,11 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $schedules = $this->schedules->getSchedules(status: $request->status ?? '');
+        $count_status = $this->schedules->countSchedules();
 
         return Inertia::render('Schedule/List', [
             'schedules' => $schedules, 
+            'count_status' => $count_status,
             'status' => $request->status
         ]);
     }

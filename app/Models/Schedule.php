@@ -137,15 +137,22 @@ class Schedule extends Model
                 ->when($status == 'finalizado', fn($query) => $query->where('status', '=', 'finalizado'))
                 ->when($status == 'cancelado', fn($query) => $query->where('status', '=', 'cancelado'))
                 ->select('*', 
-                    DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente") AS count_pending'),
-                    DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "finalizado") AS count_finished'),
-                    DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado") AS count_canceleds'),
                     DB::raw('(SELECT description FROM canceleds WHERE canceleds.schedule_id = schedules.id) AS cancellation_reason')
                 )
                 ->with('user:id,name,image')
                 ->orderBy('date', 'ASC');
 
         return $query->paginate(8);
+    }
+
+
+    public function countSchedules()
+    {
+        return $this->select(
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente") AS count_pending'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "finalizado") AS count_finished'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado") AS count_canceleds'),
+        )->first();
     }
 
 }
