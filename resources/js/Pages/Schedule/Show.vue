@@ -1,6 +1,6 @@
 <template>
     <Main>   
-        <div v-if="mySchedules.length !== 0">
+        <div v-if="mySchedules.data.length !== 0">
 
             <Modal 
                 :modal="modal" 

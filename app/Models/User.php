@@ -56,4 +56,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Schedule::class);
     }
+
+    public function getPermissionsAttribute()
+    {
+        return [
+            'view_menu' => auth()->check() && $this->type === 'manager' ? true : false
+        ];
+    }
 }

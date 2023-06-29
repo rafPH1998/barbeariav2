@@ -32,17 +32,20 @@
                             <li @click="selectStatus('pendente')" 
                                 :class="{ 'bg-indigo-600': props.status === 'pendente' || props.status == null}"
                                 class="border-collapse border border-indigo-500 text-xs rounded-full 
-                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Pendentes ({{props.count_status.count_pending}})
+                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">
+                                Pendentes ({{props.count_status !== null ? props.count_status.count_pending : '0'}})
                             </li>
                             <li @click="selectStatus('finalizado')" 
                                 :class="{ 'bg-indigo-600': props.status === 'finalizado' }"
                                 class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
-                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Finalizados ({{props.count_status.count_finished}})
+                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">
+                                Finalizados ({{props.count_status !== null ? props.count_status.count_finished : '0'}})
                             </li>
                             <li @click="selectStatus('cancelado')" 
                                 :class="{ 'bg-indigo-600': props.status === 'cancelado' }"
                                 class="ml-2 border-collapse border border-indigo-500 text-xs rounded-full 
-                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">Cancelados ({{props.count_status.count_canceleds}})
+                                px-3 py-1 cursor-pointer hover:bg-indigo-600 font-bold">
+                                Cancelados ({{props.count_status !== null ? props.count_status.count_canceleds : '0'}})
                             </li>
                         </ul>
                     </div>
@@ -154,8 +157,6 @@ const props = defineProps({
     status: String,
     count_status: Array
 })
-
-console.log(props.schedules)
 
 const date = ref('')
 const modal = ref(false)

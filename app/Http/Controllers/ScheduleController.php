@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\AvailableTimeEnum;
 use App\Models\Schedule;
+use App\Models\User;
 use App\Services\ScheduleService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,14 +21,23 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $schedules = $this->schedules->getSchedules(status: $request->status ?? '');
-        $count_status = $this->schedules->countSchedules();
+        try {
+            $this->authorize('viewAny', User::class);
 
-        return Inertia::render('Schedule/List', [
-            'schedules' => $schedules, 
-            'count_status' => $count_status,
-            'status' => $request->status
-        ]);
+            $schedules = $this->schedules->getSchedules(status: $request->status ?? '');
+            $count_status = $this->schedules->countSchedules();
+    
+            return Inertia::render('Schedule/List', [
+                'schedules' => $schedules, 
+                'count_status' => $count_status,
+                'status' => $request->status
+            ]);
+            
+        } catch (\Throwable $th) {
+            return redirect()->route('dashboard');
+        }
+
+
     }
 
     public function typeForm()
