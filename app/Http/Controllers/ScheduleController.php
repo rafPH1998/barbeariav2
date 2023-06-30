@@ -137,10 +137,16 @@ class ScheduleController extends Controller
     {
         session()->forget('dates');
 
-        if (ScheduleService::isHoliday($request->date)) {
+        $response = ScheduleService::isHoliday($request->date);
+
+        if ($response === true) {
             return redirect()
                 ->route('schedules.create', $request->type)
                 ->with('error', 'A barbearia não abre aos feriados!');
+        } elseif ($response === 'error') {
+            return redirect()
+                ->route('schedules.create', $request->type)
+                ->with('error', 'Erro interno do servidor ao buscar as datas! Tente mais tarde');
         }
 
         if (!ScheduleService::notOpenSunday($request)) {

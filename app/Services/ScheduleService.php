@@ -46,17 +46,22 @@ class ScheduleService
         };
     }
 
-    public static function isHoliday(?string $date): bool
+    public static function isHoliday(?string $date): bool|string
     {
-        $year = now()->format('Y');
-        $holidays = Http::get("https://brasilapi.com.br/api/feriados/v1/{$year}")->json();
-
-        foreach ($holidays as $holiday) {
-            if ($date == $holiday['date']) {
-                return true;
+        try {
+            $year = now()->format('Y');
+            $holidays = Http::timeout(30)->get("https://brasilapi.com.br/api/feriados/v1/{$year}")->json();
+    
+            foreach ($holidays as $holiday) {
+                if ($date == $holiday['date']) {
+                    return true;
+                }
             }
+    
+            return false;
+        } catch (\Exception $e) {
+            return 'error';
         }
-        return false;
     }
 
 }

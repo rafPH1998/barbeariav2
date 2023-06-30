@@ -23,8 +23,8 @@
                     <span v-if="errors.date" class="text-red-600 text-xs">{{errors.date}}</span>
 
                     <div 
+                        v-if="!form.processingDates"
                         class="p-2 w-full mt-6">
-
                         <input type="hidden" id="hour" v-model="form.hour">
                         
                         <div v-if="messageError">
@@ -47,8 +47,12 @@
                                 {{buttonsHours}}
                             </button>
                         </div>
-
                     </div>
+                    <div v-else class="p-2 w-full mt-6 flex items-center justify-center">
+                        <SppinerLoading/>
+                        <p class="text-xs ml-1">Carregando datas...</p>
+                    </div>
+
                     <span v-if="errors.hour" class="text-red-600 text-xs ml-2">{{errors.hour}}</span>
 
                     <button-form @click.prevent="storeSchedule()" 
@@ -93,9 +97,17 @@
         date: null,
         hour: null,
         processing: false,
+        processingDates: false,
         type: page.props.service
     })
-    const getDates = () => router.post('/schedules', form)
+
+    const getDates = () => {
+        router.post('/schedules', form, {
+            onStart: () => (form.processingDates = true), 
+            onFinish: () => (form.processingDates = false)
+        })
+    }
+
     const chooseDate = (hourSelected) => form.hour = hourSelected
 
     const storeSchedule = () => {

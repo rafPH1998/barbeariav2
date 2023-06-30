@@ -57,7 +57,7 @@
                         <div v-if="schedule.status === 'cancelado'">
                             <div class="flex ml-2">
                                 <p class="font-bold">Quem cancelou:</p>
-                                <span v-if="schedule.user_id !== schedule.author_canceled_id" class="ml-2 text-gray-500">
+                                   <span v-if="schedule.user_id !== schedule.author_canceled_id" class="ml-2 text-gray-500">
                                     Barbearia
                                 </span>
                                 <span v-else class="ml-2 text-gray-500">
