@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
@@ -36,8 +35,6 @@ class ScheduleController extends Controller
         } catch (\Throwable $th) {
             return redirect()->route('dashboard');
         }
-
-
     }
 
     public function typeForm()
@@ -59,18 +56,10 @@ class ScheduleController extends Controller
     {
         $availableTime = AvailableTimeEnum::cases();
     
-        if (ScheduleService::isHoliday($request->date)) {
-            session()->forget('dates');
-            return redirect()
-                ->route('schedules.create', $request->type)
-                ->with('error', 'A barbearia não abre aos feriados!');
-        }
-        
-        if (!ScheduleService::notOpenSunday($request)) {
-            session()->forget('dates');
-            return redirect()
-                    ->route('schedules.create', $request->type)
-                    ->with('error', 'A barbearia não abre aos domingos!');
+          // Realiza as validações iniciais
+        $validationResult = $this->performInitialValidations($request);
+        if ($validationResult !== null) {
+            return $validationResult;
         }
 
         $data = $request->validate([
@@ -138,20 +127,29 @@ class ScheduleController extends Controller
     }
 
     public function mySchedules()
-    {
-
-        $mySchedules = $this->schedules
-                        ->leftJoin('canceleds', 'schedules.id', '=', 'canceleds.schedule_id')
-                        ->select('schedules.*', 'canceleds.description')
-                        ->where('schedules.user_id', auth()->user()->id)
-                        ->paginate(3);
-                
-        return Inertia::render('Schedule/Show', ['mySchedules'=>$mySchedules]);
+    { 
+        return Inertia::render('Schedule/Show', [
+            'mySchedules'=>$this->schedules->getMySchedules()
+        ]);
     }
 
-    public function getAvailableData($dates)
+    private function performInitialValidations(Request $request)
     {
-        dd("chegou". $dates);
+        session()->forget('dates');
+
+        if (ScheduleService::isHoliday($request->date)) {
+            return redirect()
+                ->route('schedules.create', $request->type)
+                ->with('error', 'A barbearia não abre aos feriados!');
+        }
+
+        if (!ScheduleService::notOpenSunday($request)) {
+            return redirect()
+                ->route('schedules.create', $request->type)
+                ->with('error', 'A barbearia não abre aos domingos!');
+        }
+
+        return null;
     }
 
 }

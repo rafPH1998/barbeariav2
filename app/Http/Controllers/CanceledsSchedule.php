@@ -18,7 +18,8 @@ class CanceledsSchedule extends Controller
         ]);
 
         $schedule = Schedule::find($request->id);
-        
+        $user = auth()->user();
+
         if ($schedule) {
             $schedule->update([
                 'status' => 'cancelado'
@@ -27,12 +28,14 @@ class CanceledsSchedule extends Controller
 
         Canceled::query()->create([
             'description' => $request->description,
-            'user_id'     => auth()->user()->id,
+            'user_id'     => $user->id,
             'schedule_id' => $schedule->id,
         ]);
+        
+        $route = $user->type == 'manager' ? 'schedules.index' : 'schedules.mySchedules';
 
         return redirect()
-                ->route('schedules.mySchedules')
+                ->route($route)
                 ->with('success', 'Agendamento cancelado!');
     }
 }

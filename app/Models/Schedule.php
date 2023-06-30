@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class Schedule extends Model
 {
@@ -24,6 +26,11 @@ class Schedule extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function canceleds()
+    {
+        return $this->hasMany(Canceled::class);
     }
 
     protected function createdAt(): Attribute
@@ -146,7 +153,7 @@ class Schedule extends Model
     }
 
 
-    public function countSchedules()
+    public function countSchedules(): Object
     {
         return $this->select(
             DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente") AS count_pending'),
@@ -154,5 +161,18 @@ class Schedule extends Model
             DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado") AS count_canceleds'),
         )->first();
     }
+
+    public function getMySchedules(): LengthAwarePaginator
+    {
+        return $this->leftJoin('canceleds', 'schedules.id', '=', 'canceleds.schedule_id')
+                    ->select('schedules.*', 'canceleds.description', 'canceleds.user_id AS author_canceled_id')
+                    ->where('schedules.user_id', auth()->user()->id)
+                    ->paginate(3);   
+    }
+
+    
+      
+
+
 
 }
