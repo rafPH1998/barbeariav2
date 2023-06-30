@@ -23,13 +23,17 @@ class ScheduleController extends Controller
         try {
             $this->authorize('viewAny', User::class);
 
-            $schedules = $this->schedules->getSchedules(status: $request->status ?? '');
+            $schedules = $this->schedules->getSchedules(
+                status: $request->status ?? '', 
+                date: $request->date ?? ''
+            );
             $count_status = $this->schedules->countSchedules();
     
             return Inertia::render('Schedule/List', [
                 'schedules' => $schedules, 
                 'count_status' => $count_status,
-                'status' => $request->status
+                'status' => $request->status,
+                'dateSelected' => $request->date
             ]);
             
         } catch (\Throwable $th) {

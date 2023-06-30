@@ -12,21 +12,24 @@
                 <h1 class="font-bold py-4 uppercase">Tabela de agendamentos</h1>
 
                 <div class="flex justify-between mt-5">
-                    <form action="#" class="">
-                        <input type="text"
-                            placeholder="Busque por data Ex: (00/00/0000)"
-                            v-model="date"
-                            @input="formatDate"
-                            class="py-2.5 px-3 ml-0 bg-transparent
-                            leading-tight text-gray-500 rounded-l-lg outline-none
-                            border-collapse border border-gray-700 text-xs">
-                        <button 
-                            id="search"
-                            class="text-white font-bold text-xs hover:bg-indigo-600
-                            rounded-r-lg border border-indigo-500">
-                            Buscar
-                        </button>
-                    </form>
+                    <div>
+                        <p class="text-xs">Busque agendas por alguma data</p>
+                        <form action="#" @submit.prevent="filterDate()" class="mt-1">
+                            <input type="text"
+                                placeholder="Ex: (00/00/0000)"
+                                v-model="date"
+                                @input="formatDate"
+                                class="py-2.5 px-3 ml-0 bg-transparent
+                                leading-tight text-gray-500 rounded-l-lg outline-none
+                                border-collapse border border-gray-700 text-xs">
+                            <button 
+                                id="search"
+                                class="text-white font-bold text-xs hover:bg-indigo-600
+                                rounded-r-lg border border-indigo-500">
+                                Buscar
+                            </button>
+                        </form>
+                    </div>
                     <div>
                         <ul class="flex">
                             <li @click="selectStatus('pendente')" 
@@ -155,6 +158,7 @@ const props = defineProps({
     schedules: Object,
     errors: Object,
     status: String,
+    dateSelected: String,
     count_status: Array
 })
 
@@ -177,9 +181,14 @@ const selectStatus = (selectedStatus) => {
     router.get('/schedules', {status: selectedStatus });
 };
 
+const filterDate = () => {
+    router.get('/schedules', {date: date.value });
+};
+
 const changePage = (page) => {
     router.get('/schedules', {
-        status: props.status,
+        status: props.status, 
+        date  : props.dateSelected, 
         page
     });
 }

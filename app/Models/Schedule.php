@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Object_;
+use Illuminate\Database\Eloquent\Builder;
 
 class Schedule extends Model
 {
@@ -137,12 +137,14 @@ class Schedule extends Model
         return $newHours;
     }
 
-    public function getSchedules(?string $status)
+    public function getSchedules(?string $status, ?string $date)
     {
+
         $query = $this
-                ->when($status == 'pendente' || $status == null, fn($query) => $query->where('status', '=', 'pendente'))
-                ->when($status == 'finalizado', fn($query) => $query->where('status', '=', 'finalizado'))
-                ->when($status == 'cancelado', fn($query) => $query->where('status', '=', 'cancelado'))
+                ->filterDate($date)
+                ->statusPending($status)
+                ->statusFinished($status)
+                ->statusCanceled($status) 
                 ->select('*', 
                     DB::raw('(SELECT description FROM canceleds WHERE canceleds.schedule_id = schedules.id) AS cancellation_reason')
                 )
@@ -152,6 +154,37 @@ class Schedule extends Model
         return $query->paginate(8);
     }
 
+    public function scopeFilterDate(Builder $query, ?string $date)
+    {
+        $query->when(
+            str($date)->isNotEmpty(),
+            fn(Builder $query) => $query->where('date', '=', Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d'))
+        );
+    }
+
+    public function scopeStatusPending(Builder $query, ?string $status)
+    {
+        $query->when(
+            $status == 'pendente' || $status == null,
+            fn(Builder $query) => $query->where('status', '=', 'pendente')
+        );
+    }
+
+    public function scopeStatusFinished(Builder $query, ?string $status)
+    {
+        $query->when(
+            $status == 'finalizado',
+            fn(Builder $query) => $query->where('status', '=', 'finalizado')
+        );
+    }
+
+    public function scopeStatusCanceled(Builder $query, ?string $status)
+    {
+        $query->when(
+            $status == 'cancelado',
+            fn(Builder $query) => $query->where('status', '=', 'cancelado')
+        );
+    }
 
     public function countSchedules(): Object
     {
