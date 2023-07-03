@@ -56,7 +56,9 @@ Route::middleware('auth')
     /*
     *Route para dashboard
     */
-    Route::get('/users', UserController::class)->name('users.index');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users-birthday', [UserController::class, 'birthday'])->name('users.birthday');
+    Route::get('/users-missing', [UserController::class, 'missing'])->name('users.missing');
 
     /*
     *Route para avaliacoes
