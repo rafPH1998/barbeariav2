@@ -16,7 +16,7 @@
                 <p class="text-xs ml-2 text-green-600">{{user.created_at}}</p>
             </div>
             <div class="flex">
-                <p class="text-xs font-bold">Qt de cortes:</p>
+                <p class="text-xs font-bold">Total de cortes:</p>
                 <p class="text-xs ml-2">{{user.agenda_count}}</p>
             </div>
         </div>

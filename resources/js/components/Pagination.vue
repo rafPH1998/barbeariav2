@@ -78,6 +78,6 @@ export default {
 
 <style>
  .pagination{
-    font-size: 14.8px;
+    font-size: 14.5px;
  }
 </style>

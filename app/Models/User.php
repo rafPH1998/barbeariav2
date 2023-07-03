@@ -57,6 +57,21 @@ class User extends Authenticatable
         return $this->hasOne(Schedule::class);
     }
 
+    public static function getUsersMissing()
+    {
+        $threeMonthsAgo = Carbon::now()->subMonths(3)->format('Y-m-d');
+        
+        return self::select('id', 'name', 'image', 'created_at')
+                    ->withCount('agenda')
+                    ->whereNotExists(function ($query) use ($threeMonthsAgo) {
+                        $query->select()
+                            ->from('schedules')
+                            ->whereRaw('schedules.user_id = users.id')
+                            ->where('schedules.date', '>=', $threeMonthsAgo);
+                    })
+                    ->paginate(8);
+    }
+
     public function getPermissionsAttribute()
     {
         return [
