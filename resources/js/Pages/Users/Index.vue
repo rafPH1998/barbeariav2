@@ -22,8 +22,6 @@ import { router } from '@inertiajs/vue3'
 
 const props = defineProps({users: Object})
 
-console.log(props.users)
-
 const changePage = (page) => {
     router.get('/users', {page});
 }

@@ -9,6 +9,7 @@
             <input-field v-model="form.name" label="Nome" name="name" type="text" :error="errors.name"/>
             <input-field v-model="form.email" label="E-mail" name="email" type="email" :error="errors.email"/>
             <input-field v-model="form.password" label="Senha" name="password" type="password" :error="errors.password"/>
+            <input-field v-model="form.birthday" label="Digite sua data de Nascimento" name="birthday" type="text" :error="errors.birthday" placeholder="Padrão 00/00/0000"/>
 
             <button-form :loader="form.processing">
                 <sppiner-loading v-show="form.processing"/>
@@ -39,6 +40,7 @@
         name: null,
         email: null,
         password: null,
+        birthday: null,
         processing: false
     })
     

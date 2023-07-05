@@ -13,11 +13,15 @@
             </div>
             <div class="flex mt-5">
                 <p class="text-xs font-bold">Cliente desde:</p>
-                <p class="text-xs ml-2 text-green-600">{{user.created_at}}</p>
+                <p class="text-xs ml-2 text-yellow-500">{{user.created_at}}</p>
+            </div>
+            <div class="flex mt-5">
+                <p class="text-xs font-bold">Niver:</p>
+                <p class="text-xs ml-2 text-yellow-400">10/09/1998</p>
             </div>
             <div class="flex">
                 <p class="text-xs font-bold">Total de cortes:</p>
-                <p class="text-xs ml-2">{{user.agenda_count}}</p>
+                <p class="text-xs ml-2 text-yellow-400">{{user.agenda_count}}</p>
             </div>
         </div>
     </div>
@@ -30,7 +34,7 @@
 
 <style>
     .w-44:hover {
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
         transition: box-shadow 0.3s ease-in-out;
     }
 </style>

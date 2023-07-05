@@ -7,6 +7,7 @@
         :value="modelValue"
         :name="name" 
         :id="name" 
+        :placeholder="placeholder" 
         @input="$emit('update:modelValue', $event.target.value)"
         :class="[
             error ? 'border border-1 border-red-500' : ''
@@ -42,6 +43,10 @@
         name: {
             type: String,
             required: true,
+        },
+        placeholder: {
+            type: String,
+            required: false,
         },
         value: {
             type: String,
