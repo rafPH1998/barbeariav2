@@ -58,7 +58,7 @@
                             :class="{ 'bg-white/10': $page.url === '/users-birthday' }"
                             class="flex items-center w-full p-2 rounded-lg pl-6 group hover:bg-white/10 dark:text-white text-xs">
                             <IconBirthday/>
-                            <p class="ml-2">Aniversários (2)</p>
+                            <p class="ml-2">Aniversários ({{birthdaysOfTheDay}})</p>
                         </Link>
                     </li>
                     <li>
@@ -167,6 +167,7 @@ const page = usePage()
 const user = computed(() => page.props.flash.user)
 const canView = computed(() => page.props.permissions.view_menu)
 const countSchedules = computed(() => page.props.flash.countSchedules)
+const birthdaysOfTheDay = computed(() => page.props.birthdaysOfTheDay)
 
 const isMenuOpen = () => {
     subMenu.value = !subMenu.value

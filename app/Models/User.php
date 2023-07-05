@@ -73,6 +73,19 @@ class User extends Authenticatable
                     ->paginate(8);
     }
 
+    public static function getUserBirthdayData()
+    {
+        $dateCarbon = Carbon::now();
+        $dateCurrent = $dateCarbon->format('d');
+        $monthCurrent = $dateCarbon->format('m');
+        $dayAndMonth = $dateCurrent.'-'.$monthCurrent;
+
+        // Utilizando o operador "LIKE" para comparar apenas o dia e o mês
+        return self::whereRaw(
+                "DATE_FORMAT(birthday, '%d-%m') LIKE ?", [$dayAndMonth.'%']
+            );
+    }
+
     public function getPermissionsAttribute()
     {
         return [

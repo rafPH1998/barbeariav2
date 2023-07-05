@@ -38,7 +38,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-
         if (auth()->check()) {
             $userId = auth()->user()->id;
             $user = User::withCount(['agenda' => function ($query) {
@@ -56,6 +55,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => fn () => auth()->check() ? $user : null,
                 'countSchedules' => auth()->check() ? $countSchedules : null
             ],
+            'birthdaysOfTheDay' => $user->getUserBirthdayData()->count(),
             'permissions' => $user->permissions ?? ''
         ]);
     }
