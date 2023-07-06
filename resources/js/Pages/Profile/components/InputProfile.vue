@@ -11,10 +11,10 @@
             :name="name" 
             :id="name" 
             @input="$emit('update:modelValue', $event.target.value)"
-            :disabled="props.type == 'email'"
+            :disabled="props.type == 'email' && props.modelValue !== undefined"
             :class="[
                 error ? 'border border-1 border-red-500' : '',
-                props.type == 'email' ? 'bg-white/10' : ''
+                props.type == 'email' && props.modelValue !== undefined ? 'bg-white/10' : ''
             ]"
             class="bg-transparent  appearance-none rounded w-full py-2 px-3 text-gray-400 border-collapse border border-gray-700 focus:outline-none"
         >
