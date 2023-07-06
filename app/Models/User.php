@@ -46,6 +46,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected function birthday(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('d/m/Y')     
+        );
+    }
+
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -62,7 +69,7 @@ class User extends Authenticatable
     {
         $threeMonthsAgo = Carbon::now()->subMonths(3)->format('Y-m-d');
         
-        return self::select('id', 'name', 'image', 'created_at')
+        return self::select('id', 'name', 'image', 'birthday', 'created_at')
                     ->withCount('agenda')
                     ->whereNotExists(function ($query) use ($threeMonthsAgo) {
                         $query->select()

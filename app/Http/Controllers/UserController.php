@@ -12,7 +12,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Users/Index', [
-            'users' => User::select('id', 'name', 'image', 'created_at')->withCount('agenda')->paginate(10)
+            'users' => User::select('id', 'name', 'image', 'birthday', 'created_at')->withCount('agenda')->paginate(10)
         ]);
     }
 
