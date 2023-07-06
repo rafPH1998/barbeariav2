@@ -4,7 +4,7 @@
             <h1 class="font-bold py-4 uppercase ml-4">Listagem de clientes</h1>
 
             <div class="flex flex-wrap mt-4">
-                <CardUsers :users="users.data"/>
+                <CardUsers :users="users.data" :status="'active'"/>
             </div>
             <div class="ml-4 mt-5">
                 <Pagination :data="users" @changePage="changePage"/>

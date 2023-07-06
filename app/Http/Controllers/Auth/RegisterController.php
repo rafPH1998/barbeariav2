@@ -33,7 +33,7 @@ class RegisterController extends Controller
             //throw $th;
         }
 
-        return redirect()->route('register.store')
+        return redirect()->route('dashboard')
             ->with('success', 'Usuário cadastrado com sucesso! Faça o login');
     }
 }

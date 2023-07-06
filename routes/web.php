@@ -6,6 +6,7 @@ use App\Http\Controllers\{
     HomeController,
     ProfileController,
     CanceledsSchedule,
+    EmployeController,
     ScheduleController,
     UserController
 };
@@ -70,6 +71,11 @@ Route::middleware('auth')
     */
     Route::post('/profile', [ProfileController::class, 'store']);
     Route::resource('/profile', ProfileController::class)->only('index');
+
+     /*
+    *Route para funcionarios
+    */
+    Route::resource('/employees', EmployeController::class)->except(['show', 'edit']);
     
 }); 
 

@@ -70,7 +70,7 @@
                                 </tr>                          
                             </thead>
                             <tbody v-for="schedule in schedules.data" :key="schedule.id">
-                                <tr class="border-b border-gray-700 text-center">
+                                <tr class="border-b border-gray-700 text-center hover:bg-white/10">
                                     <td 
                                         :class="[
                                             schedule.cancellation_reason ? 'py-12': 'py-3'

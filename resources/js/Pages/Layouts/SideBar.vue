@@ -139,6 +139,18 @@
                     </div>
                 </div>
             </Link>
+            <Link v-if="canView" :href="route('employees.index')" :class="{'bg-white/10': $page.url === '/employees'}"
+                class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
+                <div class="relative flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
+                    <IconEmployees/>
+                    <div>
+                        <p 
+                            :class="{'text-indigo-400': $page.url === '/employees'}"
+                            class="font-bold text-base text-slate-200 leading-4 group-hover:text-indigo-400 ml-4">Funcionários
+                        </p>
+                    </div>
+                </div>
+            </Link>
             <Link :href="route('logout')" method="POST"
                 class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
                 <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
@@ -161,6 +173,7 @@ import IconProfile from './components/icons/IconProfile.vue';
 import IconDashboard from './components/icons/IconDashboard.vue';
 import IconScheduleService from './components/icons/IconScheduleService.vue';
 import IconUserMissing from './components/icons/IconUserMissing.vue';
+import IconEmployees from './components/icons/IconEmployees.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue'
 
