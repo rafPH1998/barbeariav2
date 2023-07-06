@@ -1,6 +1,6 @@
 <template>
     <Main>
-        <div>
+        <div class="animate__animated animate__fadeIn">
             <form action="#" 
                 method="POST" 
                 @submit.prevent="submitForm()"

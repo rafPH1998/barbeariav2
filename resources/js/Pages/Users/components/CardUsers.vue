@@ -6,7 +6,10 @@
         cursor-pointer animate__animated animate__fadeIn">
         <div>
             <div class="flex justify-center">
-                <img class="h-10 w-10 rounded-full object-cover" src="/assets/images/user.svg">
+                <img class="h-10 w-10 rounded-full object-cover" 
+                :src="[
+                    user.image ? '/storage/' + user.image : '/assets/images/user.svg'
+                ]">
             </div>
             <div class="mt-3 flex justify-center">
                 <p class="text-xs font-bold">{{user.name}}</p>
@@ -16,8 +19,8 @@
                 <p class="text-xs ml-2 text-yellow-500">{{user.created_at}}</p>
             </div>
             <div class="flex mt-5">
-                <p class="text-xs font-bold">Niver:</p>
-                <p class="text-xs ml-2 text-yellow-400">10/09/1998</p>
+                <p class="text-xs font-bold">Aniversário:</p>
+                <p class="text-xs ml-2 text-yellow-400">{{user.birthday}}</p>
             </div>
             <div class="flex">
                 <p class="text-xs font-bold">Total de cortes:</p>

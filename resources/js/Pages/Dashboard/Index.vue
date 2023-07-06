@@ -2,7 +2,7 @@
     <Main>
         <div id="24h">
             <h1 class="font-bold py-4 uppercase">Dados atualizados do dia 10/06/2023</h1>
-            <div id="stats" class="grid gird-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="stats" class="grid gird-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate__animated animate__fadeIn">
 
                 <div class="bg-black/60 to-white/5 p-6 rounded-lg">
                     <div class="flex flex-row space-x-4 items-center">
