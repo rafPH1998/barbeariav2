@@ -36,15 +36,17 @@
         errors: Object
     })
 
+    const page = usePage()
+
     const form = reactive({
         name: null,
         email: null,
         password: null,
         birthday: null,
+        _token: page.props.csrf,
         processing: false
     })
     
-    const page = usePage()
     const toast = useToast();
 
     const registerUser = () => {
@@ -52,7 +54,7 @@
             onStart: () => (form.processing = true), 
             onFinish: () => {
                 if (page.props.flash.success) {
-                    router.get('/login')
+                    router.get('/dashboard')
                     toast.success(`Sucesso! ${page.props.flash.success} :)`)
                 }
                 form.processing = false

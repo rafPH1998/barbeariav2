@@ -96,6 +96,7 @@
     const form = reactive({
         date: null,
         hour: null,
+        _token: page.props.csrf,
         processing: false,
         processingDates: false,
         type: page.props.service

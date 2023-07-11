@@ -117,6 +117,7 @@ export default {
 
             router.post('/schedules/canceleds', 
                 {
+                    _token: page.props.csrf,
                     description: description.value,
                     id: filledId
                 }, 

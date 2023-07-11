@@ -37,6 +37,7 @@
                     v-model="form.email"
                         label="E-mail" 
                         name="email" 
+                        id="email"
                         type="email" 
                         :error="errors.email"
                     />

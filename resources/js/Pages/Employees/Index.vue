@@ -7,10 +7,18 @@
                 Cadastrar funcionário
             </button-form>
 
-            <ModalDelete :modal="modal" @closeModal="modal.show = false" @deleteUser="deleteUser(modal.userId)" />
+            <ModalDelete 
+                :modal="modal" 
+                @closeModal="modal.show = false" 
+                @deleteUser="deleteUser(modal.userId)"
+            />
 
             <!-- modal para cadastrar um funcionario -->
-            <FormModal :modal="modal" @closeModal="modal.create = false"/>
+            <FormModal 
+                :errors="errors" 
+                :modal="modal" 
+                @closeModal="modal.create = false"
+            />
 
             <table class="w-full whitespace-nowrap text-white text-xs mt-10">
                 <thead class="bg-black/60">
@@ -71,12 +79,12 @@ import Main from '../Layouts/Main.vue';
 import ButtonForm from '../../Pages/Auth/components/ButtonForm.vue'
 import IconTrash from '../Layouts/components/icons/IconTrash.vue'
 import ModalDelete from  '../../components/ModalDelete.vue'
-import FormModal from  '../../components/FormModal.vue'
+import FormModal from  '../Employees/components/FormModal.vue'
 import { useToast } from "vue-toastification";
 import { router, usePage } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 
-const props = defineProps({employees: Object})
+const props = defineProps({employees: Object, errors: Object})
 
 const toast = useToast();
 

@@ -75,7 +75,7 @@ Route::middleware('auth')
      /*
     *Route para funcionarios
     */
-    Route::resource('/employees', EmployeController::class)->except(['show', 'edit']);
+    Route::resource('/employees', EmployeController::class)->except(['show', 'edit', 'create']);
     
 }); 
 
