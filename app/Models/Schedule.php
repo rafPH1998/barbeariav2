@@ -73,7 +73,6 @@ class Schedule extends Model
                 $month = strtoupper($date->shortEnglishMonth);
                 $year = $date->format('Y');
 
-
                 return "{$day}/{$month}/{$year}";
             }
         );

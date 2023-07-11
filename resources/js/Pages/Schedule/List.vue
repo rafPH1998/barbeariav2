@@ -18,7 +18,7 @@
                             <input type="text"
                                 placeholder="Ex: (00/00/0000)"
                                 v-model="date"
-                                @input="formatDate"
+                                @input="handleInput"
                                 class="py-2.5 px-3 ml-0 bg-transparent
                                 leading-tight text-gray-500 rounded-l-lg outline-none
                                 border-collapse border border-gray-700 text-xs">
@@ -155,6 +155,7 @@ import Pagination from '../../components/Pagination.vue';
 import Modal from '../../components/Modal.vue'
 import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
+import { formatDate } from '../../funcoes/formaDate';
 
 const props = defineProps({
     schedules: Object,
@@ -200,30 +201,12 @@ const openModal = (obj) => {
     objectUserSelected.value = obj
 }
 
-const formatDate = (event) => {
-    const input = event.target;
-    let inputValue = input.value.replace(/\D/g, '');
+const handleInput = (event) => {
+  const input = event.target;
+  const formattedValue = formatDate(input.value);
+  date.value = formattedValue;
+};
 
-    if (inputValue.length > 8) {
-        inputValue = inputValue.slice(0, 8);
-    }
-
-    let formattedValue = '';
-    if (inputValue.length > 2) {
-        formattedValue += inputValue.substr(0, 2) + '/';
-        inputValue = inputValue.substr(2);
-    }
-    
-    if (inputValue.length > 2) {
-        formattedValue += inputValue.substr(0, 2) + '/';
-        inputValue = inputValue.substr(2);
-    }
-
-    formattedValue += inputValue;
-
-    date.value = formattedValue;
-}
- 
 </script>
 
 

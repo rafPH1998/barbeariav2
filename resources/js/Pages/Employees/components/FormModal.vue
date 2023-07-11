@@ -17,8 +17,22 @@
                                 <h1 class="font-bold uppercase">Cadastrar funcionário na barbeária</h1>
                                 <input-profile v-model="form.name" label="Nome" name="name" type="text" :error="errors.name"/>
                                 <input-profile v-model="form.email" label="E-mail" name="email" type="email" :error="errors.email"/>
-                                <input-profile v-model="form.birthday" label="Data de Nascimento" name="text" type="birthday" :error="errors.birthday"/>
                                 <input-profile v-model="form.password" label="Senha" name="password" type="password" :error="errors.password"/>
+
+                               <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 mt-4">
+                                    <label for="birthday" class="block uppercase tracking-wide text-gray-300 text-xs font-light mb-1">Data de Aniversário</label>
+                                    <input
+                                        :class="[
+                                            errors.birthday ? 'border border-1 border-red-500' : ''
+                                        ]"
+                                        class="bg-transparent  appearance-none rounded w-full py-2 px-3 text-gray-400 border-collapse border border-gray-700 focus:outline-none"
+                                        placeholder="Padrão: 00/00/0000"
+                                        @input="handleInput" 
+                                        name="birthday" id="birthday" type="text"
+                                        v-model="form.birthday"
+                                    >
+                                    <span v-if="errors.birthday" class="text-red-600 text-xs">{{errors.birthday}}</span>
+                               </div>
                             </div>
                             <hr class="border-slate-700">
                             <div class="bg-zinc-900 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
@@ -45,6 +59,7 @@ import ButtonForm from '../../Auth/components/ButtonForm.vue'
 import { router, usePage } from '@inertiajs/vue3';
 import { useToast } from "vue-toastification";
 import SppinerLoading from '../../../components/SppinerLoading.vue'
+import { formatDate } from '../../../funcoes/formaDate';
 import { reactive } from 'vue'
 
 export default {
@@ -104,8 +119,15 @@ export default {
             });
         };
 
+        const handleInput = (event) => {
+            const input = event.target;
+            const formattedValue = formatDate(input.value);
+            form.birthday = formattedValue;
+        };
+
         return {
             form,
+            handleInput,
             closeModal,
             resetForm,
             storeEmployee

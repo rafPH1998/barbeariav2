@@ -6,14 +6,14 @@
         <h1 class="text-white">Login</h1>
 
         <form @submit.prevent="login()" action="#" method="POST" class="flex flex-col mt-4">
-            <input-field 
+            <input-field-text 
                 v-model="form.email" 
                 label="E-mail" 
                 name="email" 
                 type="email" 
                 :error="errors.email"
                 />
-            <input-field 
+            <input-field-text  
                 v-model="form.password" 
                 label="Senha" 
                 name="password" 
@@ -35,7 +35,7 @@
 
 <script setup>
     import AuthLayout from '../Auth/layouts/AuthLayout.vue'
-    import InputField from '../Auth/components/InputField.vue'
+    import InputFieldText from '../Auth/components/InputFieldText.vue'
     import ButtonForm from '../Auth/components/ButtonForm.vue'
     import SppinerLoading from '../../components/SppinerLoading.vue'
     import { Link, Head, router, usePage } from '@inertiajs/vue3';
