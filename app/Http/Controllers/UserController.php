@@ -11,8 +11,13 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        $users = User::where('type', '=', 'user')
+                ->select('id', 'name', 'image', 'birthday', 'created_at')
+                ->withCount('agenda')
+                ->paginate(10);
+                
         return Inertia::render('Users/Index', [
-            'users' => User::select('id', 'name', 'image', 'birthday', 'created_at')->withCount('agenda')->paginate(10)
+            'users' => $users
         ]);
     }
 
