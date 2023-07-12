@@ -11,9 +11,16 @@ class EmployeController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Employees/Index', [
-            'employees' => User::whereIn('type', ['manager', 'employee'])->get()
-        ]);
+        try {
+            $this->authorize('viewAny', User::class);
+
+            return Inertia::render('Employees/Index', [
+                'employees' => User::whereIn('type', ['manager', 'employee'])->get()
+            ]);
+
+        } catch (\Throwable $th) {
+            return redirect()->route('dashboard');
+        }
     }
 
     public function store(Request $request)
