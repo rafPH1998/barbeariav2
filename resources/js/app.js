@@ -4,6 +4,10 @@ import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import store from './store';
+import { createStore } from 'vuex'
+
+const vuexStore = createStore(store)
 
 const optionsToast = {
   position: "top-right",
@@ -28,6 +32,7 @@ createInertiaApp({
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
+      .use(vuexStore)
       .use(Toast, optionsToast)
       .mixin({methods: {route}})
       .mount(el)
