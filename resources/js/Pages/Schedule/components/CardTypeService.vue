@@ -24,21 +24,21 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
 defineProps({
-        nameService: {
-            type: String,
-            required: true,
-        },
-        hour: {
-            type: String,
-            required: true,
-        },
-        price: {
-            type: String,
-            required: true,
-        },
-        typeService: {
-            type: String,
-            required: true,
-        },
-    })
+    nameService: {
+        type: String,
+        required: true,
+    },
+    hour: {
+        type: String,
+        required: true,
+    },
+    price: {
+        type: String,
+        required: true,
+    },
+    typeService: {
+        type: String,
+        required: true,
+    },
+})
 </script>

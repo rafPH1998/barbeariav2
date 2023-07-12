@@ -32,6 +32,7 @@ class ScheduleSeeder extends Seeder
                 'hour' => $hour,
                 'end_service' => '20:00',
                 'status' => $status,
+                'barber' => 1,
                 'service' => $service,
             ]);
         }

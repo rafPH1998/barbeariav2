@@ -23,17 +23,30 @@
                         >
                     <span v-if="errors.date" class="text-red-600 text-xs">{{errors.date}}</span>
 
-                    <div>Data selecionada: <span class="text-indigo-500">{{ selectedDate }}</span></div>
+                    <div>
+                        <div class="flex text-xs">
+                            <p>Data selecionada:</p><span class="text-indigo-500 ml-1">{{ selectedDate }}</span>
+                        </div>
+                        <div v-show="form.hour" class="flex">
+                            <p class="text-xs">Hora selecionada:</p>
+                            <a 
+                                class="bg-indigo-600 px-1 ml-1
+                                text-white-700 font-semibold cursor-pointer
+                                border border-indigo-500 rounded text-xs">
+                                {{form.hour}}
+                            </a>
+                        </div>
+                    </div>
 
                     <div 
                         v-if="!form.processingDates"
                         class="p-2 w-full mt-6">
                         <input type="hidden" id="hour" v-model="form.hour">
                         
-                        <div v-if="messageError">
+                        <div v-show="messageError">
                             <p class="text-red-600">{{ messageError }} <p class="text-white">Que tal agendar para outra data? =)</p></p>
                         </div>
-                        <div v-else>
+                        <div v-if="!form.hour">
                             <p v-show="form.date" class="text-xs">Selecione um horário</p>
                             <button 
                                 v-for="(buttonsHours, chave) in page.props.flash.success"
@@ -48,6 +61,9 @@
                                 hover:border-transparent rounded text-xs">
                                 {{buttonsHours}}
                             </button>
+                        </div>
+                        <div v-else class="flex justify-center">
+                            <CardBarber :barbers="barbers" @barberSelected="getBarberSelected"/>
                         </div>
                     </div>
                     <div v-else class="p-2 w-full mt-6 flex items-center justify-center">
@@ -80,6 +96,7 @@
     import Main from '../Layouts/Main.vue';
     import ButtonForm from '../Auth/components/ButtonForm.vue'
     import SppinerLoading from '../../components/SppinerLoading.vue'
+    import CardBarber from './components/CardBarber.vue';
     import { Link, router, usePage } from '@inertiajs/vue3';
     import { reactive, ref, onMounted, computed } from 'vue'
     import { useToast } from "vue-toastification";
@@ -96,12 +113,14 @@
     const page = usePage()
     const messageError = computed(() => page.props.flash.error)
     const selectedDate = computed(() => store.state.selectedDate)
+    const barbers = computed(() => page.props.flash.barbers)
     const minDate = ref(null)
     const store = useStore();
 
     const form = reactive({
         date: null,
         hour: null,
+        barber: null,
         _token: page.props.csrf,
         processing: false,
         processingDates: false,
@@ -121,8 +140,8 @@
     //reseta do vuex data selecionada
     store.commit('setSelectedDate', '')
 
-    //funcao para escolher hora selecionada
     const chooseTime = (timeSelected) => form.hour = timeSelected
+    const getBarberSelected = (barberId) => form.barber = barberId
 
     const storeSchedule = () => {
         form.date = selectedDate

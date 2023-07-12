@@ -85,6 +85,7 @@ class ScheduleController extends Controller
                             datasEnums: $availableTime, 
                             data: $request->date
                         );
+        $barbers = User::whereIn('type', ['manager', 'employee'])->get();
 
         if (count($getDates) == 0) {
             return redirect()
@@ -94,12 +95,11 @@ class ScheduleController extends Controller
         
         return redirect()
                 ->route('schedules.create', $request->type)
-                ->with('success', $getDates);
+                ->with(['success' => $getDates, 'barbers' => $barbers]);        
     }
 
     public function store(Request $request)
     {
-
         $data = $request->validate([
             'date' => 'required',
             'barber' => 'required',
@@ -118,7 +118,8 @@ class ScheduleController extends Controller
             $data['price']       = $price;
             $data['hour']        = $request->hour;
             $data['service']     = $request->type;
-        
+            $data['barber']      = $request->barber;
+            
             /** @var User $user */
             $user = auth()->user();
             $user->agenda()->create($data);
