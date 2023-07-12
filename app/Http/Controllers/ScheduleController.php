@@ -56,21 +56,16 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function getDates(Request $request)
     {
         $availableTime = AvailableTimeEnum::cases();
     
-          // Realiza as validações iniciais
+        // Realiza as validações iniciais
         $validationResult = $this->performInitialValidations($request);
         if ($validationResult !== null) {
             return $validationResult;
         }
 
-        $data = $request->validate([
-            'date' => 'required',
-            'end_service' => 'nullable',
-        ]);   
-        
         if ($this->schedules->haveScheduling()) {
             session()->forget('dates');
             return redirect()
@@ -97,8 +92,20 @@ class ScheduleController extends Controller
                 ->with('error', 'Ops Estamos sem agenda disponivel nesse dia :( ');
         }
         
-        session()->put('dates', $getDates);
+        return redirect()
+                ->route('schedules.create', $request->type)
+                ->with('success', $getDates);
+    }
 
+    public function store(Request $request)
+    {
+
+        $data = $request->validate([
+            'date' => 'required',
+            'barber' => 'required',
+            'end_service' => 'nullable',
+        ]);   
+        
         try {
             
             $horaCorte = Carbon::createFromFormat('H:i', $request->hour);

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('price')->nullable();
             $table->enum('status', ['pendente', 'cancelado', 'finalizado']);
             $table->enum('service', ['corte', 'corte_barba']);
+            $table->string('barber');
          /*    $table->enum('hours', [
                 'NOVE_HORAS',
                 'DEZ_HORAS',
