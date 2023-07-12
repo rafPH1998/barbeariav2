@@ -19,6 +19,7 @@
                         @change="getDates()"
                         v-model="form.date" 
                         :min="minDate"
+                        :disabled="schedules"
                         placeholder="DD/MM/YYYY"
                         >
                     <span v-if="errors.date" class="text-red-600 text-xs">{{errors.date}}</span>
@@ -132,13 +133,13 @@
             onStart: () => (form.processingDates = true),
             onFinish: () => {
                 form.processingDates = false
-                store.commit('setSelectedDate', form.date)
+                store.dispatch('setSelectedDate', form.date)
             }
         })
     }
 
     //reseta do vuex data selecionada
-    store.commit('setSelectedDate', '')
+    store.dispatch('setSelectedDate', '')
 
     const chooseTime = (timeSelected) => form.hour = timeSelected
     const getBarberSelected = (barberId) => form.barber = barberId
