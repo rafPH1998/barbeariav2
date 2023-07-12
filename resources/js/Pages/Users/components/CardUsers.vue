@@ -63,7 +63,7 @@
 
 
 <style>
-    .w-44:hover {
+    .effect:hover {
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
         transition: box-shadow 0.3s ease-in-out;
     }

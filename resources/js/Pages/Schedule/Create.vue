@@ -63,7 +63,8 @@
                                 {{buttonsHours}}
                             </button>
                         </div>
-                        <div v-else class="flex justify-center">
+                        <div v-else>
+                            <h1 class="flex justify-center">Selecione um barbeiro</h1>
                             <CardBarber :barbers="barbers" @barberSelected="getBarberSelected"/>
                         </div>
                     </div>
@@ -75,7 +76,7 @@
                     <span v-if="errors.hour" class="text-red-600 text-xs ml-2">{{errors.hour}}</span>
 
                     <button-form 
-                        :loader="form.processing || schedules || !selectedDate || !form.hour">
+                        :loader="shouldShowLoader">
                         <sppiner-loading v-show="form.processing"/>
                         <span v-if="form.processing">Agendando...</span>
                         <span v-else>Agendar</span>
@@ -112,11 +113,8 @@
 
     const toast = useToast();
     const page = usePage()
-    const messageError = computed(() => page.props.flash.error)
-    const selectedDate = computed(() => store.state.selectedDate)
-    const barbers = computed(() => page.props.flash.barbers)
-    const minDate = ref(null)
     const store = useStore();
+    const minDate = ref(null)
 
     const form = reactive({
         date: null,
@@ -126,6 +124,14 @@
         processing: false,
         processingDates: false,
         type: page.props.service
+    })
+
+
+    const messageError     = computed(() => page.props.flash.error)
+    const selectedDate     = computed(() => store.state.selectedDate)
+    const barbers          = computed(() => page.props.flash.barbers)
+    const shouldShowLoader = computed(() => {
+        return form.processing || props.schedules || !selectedDate.value || !form.barber || !form.hour
     })
 
     const getDates = () => {

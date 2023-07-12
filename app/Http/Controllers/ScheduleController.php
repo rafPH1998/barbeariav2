@@ -85,7 +85,9 @@ class ScheduleController extends Controller
                             datasEnums: $availableTime, 
                             data: $request->date
                         );
-        $barbers = User::whereIn('type', ['manager', 'employee'])->get();
+        $barbers = User::select('id', 'name', 'status', 'image')
+                    ->whereIn('type', ['manager', 'employee'])
+                    ->get();
 
         if (count($getDates) == 0) {
             return redirect()
@@ -107,15 +109,14 @@ class ScheduleController extends Controller
         ]);   
         
         try {
-            
             $horaCorte = Carbon::createFromFormat('H:i', $request->hour);
             $horasAdicionais = ScheduleService::calculateServiceTime($request->type);
-
             $horaCorte->addHours($horasAdicionais);
             $price = ScheduleService::calculatePriceService($request->type);
 
             $data['end_service'] = $horaCorte->format('H:i');
             $data['price']       = $price;
+            $data['date']        = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
             $data['hour']        = $request->hour;
             $data['service']     = $request->type;
             $data['barber']      = $request->barber;
