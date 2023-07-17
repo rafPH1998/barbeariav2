@@ -13,9 +13,9 @@ use Exception;
 
 class ScheduleController extends Controller
 {
-    
     public function __construct(
-        protected Schedule $schedules
+        protected Schedule $schedules,
+        protected User $user
     ){ }
 
     public function index(Request $request)
@@ -80,24 +80,39 @@ class ScheduleController extends Controller
                 ->with('error', 'Ops, estamos com agenda cheia nesse dia.');
         }
 
-        $getDates = $this->schedules
-                        ->hoursAvailable(
-                            datasEnums: $availableTime, 
-                            data: $request->date
-                        );
-        $barbers = User::select('id', 'name', 'status', 'image')
-                    ->whereIn('type', ['manager', 'employee'])
-                    ->get();
+        $dates = $this->schedules->hoursAvailable(datasEnums: $availableTime, data: $request->date);
 
-        if (count($getDates) == 0) {
+        if (count($dates) == 0) {
             return redirect()
                 ->route('schedules.create', $request->type)
                 ->with('error', 'Ops Estamos sem agenda disponivel nesse dia :( ');
         }
         
+        return redirect()->route('schedules.create', $request->type)->with('success', $dates);        
+    }
+
+    public function getBarbers(Request $request)
+    {        
+        $barbers = $this->user->getBarbers();
+        $barbersAvailable = Schedule::distinct('barber')->pluck('barber');
+        
+        $availability = [];
+    
+        foreach ($barbersAvailable as $barber) {
+            $isAvailable = Schedule::where('barber', $barber)
+                ->where('date', Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d'))
+                ->where('hour', $request->hour)
+                ->exists();
+    
+            $availability[$barber] = !$isAvailable;
+        }
+
         return redirect()
                 ->route('schedules.create', $request->type)
-                ->with(['success' => $getDates, 'barbers' => $barbers]);        
+                ->with([
+                    'barbersBusy' => $availability,
+                    'barbers' => $barbers,
+                ]);
     }
 
     public function store(Request $request)

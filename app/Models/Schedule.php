@@ -88,51 +88,79 @@ class Schedule extends Model
     
     public function hoursAvailable(array $datasEnums, string $data)
     {
-        //captura horarios que estao ocupados
         $busy = $this->whereDate('date', '=', $data)
-                        ->pluck('hour')
-                        ->toArray();
-
+            ->get(['hour', 'barber'])
+            ->toArray();
+    
         if ($data > now()->format('Y-m-d')) {
             $newHours = $this->hoursAvailableFuture($datasEnums, $busy);
         } else {
             $newHours = $this->hoursAvailableToday($datasEnums, $busy);
         }
-                
+    
         return $newHours;
     }
-
+    
     protected function hoursAvailableFuture(array $datasEnums, array $busy)
     {
         $newHours = [];
     
         foreach ($datasEnums as $case) {
             $resultHours = $case->value;
-            if (!in_array($resultHours, $busy)) {
-                $newHours[] = $resultHours;
+    
+            $isBusyForBarber1 = false;
+            $isBusyForBarber2 = false;
+    
+            foreach ($busy as $busyTime) {
+                if ($busyTime['hour'] == $resultHours && $busyTime['barber'] == '1') {
+                    $isBusyForBarber1 = true;
+                }
+    
+                if ($busyTime['hour'] == $resultHours && $busyTime['barber'] == '4') {
+                    $isBusyForBarber2 = true;
+                }
+            }
+    
+            if (!($isBusyForBarber1 && $isBusyForBarber2)) {
+                $newHours[] = $case;
             }
         }
-    
+
         return $newHours;
     }
     
+
+    
     protected function hoursAvailableToday(array $datasEnums, array $busy)
     {
-        $availableTimes = collect($datasEnums)->filter(function ($hora) {
-            return $hora->value > now()->format('H:i');
+        $selectedHour = now()->format('H:i');
+        
+        $availableTimes = collect($datasEnums)->filter(function ($case) use ($selectedHour) {
+            return $case->value > $selectedHour;
         })->values()->toArray();
     
         $newHours = [];
     
         foreach ($availableTimes as $case) {
             $resultHours = $case->value;
-            if (!in_array($resultHours, $busy)) {
+            $barberName = $case->name;
+    
+            $isBusy = false;
+            foreach ($busy as $busyTime) {
+                if ($busyTime['hour'] == $resultHours && in_array($busyTime['barber'], [1, 4])) {
+                    $isBusy = true;
+                    break;
+                }
+            }
+    
+            if (!$isBusy || $resultHours == $selectedHour) {
                 $newHours[] = $resultHours;
             }
         }
     
         return $newHours;
     }
+    
 
     public function getSchedules(?string $status, ?string $date)
     {

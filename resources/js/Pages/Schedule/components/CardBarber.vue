@@ -4,12 +4,12 @@
             v-for="barber in barbers" :key="barber.id"
             :class="{
                 'border-indigo-700' : barber.id === barberSelected ,
-                'bg-white/5' : barber.status === 0,
-                'effect' : barber.status !== 0
+                'bg-white/5' : barber.status === 0 || isBarberAvailable(barber.id),
+                'effect' : barber.status !== 0 && !isBarberAvailable(barber.id)
             }"
             class="w-44 p-2 mt-4 ml-4 border-collapse border
             border-gray-700 rounded shadow flex justify-center 
-            cursor-pointer animate__animated animate__fadeIn" @click="barber.status !== 0 && selectBarber(barber.id)">
+            cursor-pointer animate__animated animate__fadeIn" @click="barber.status !== 0 && !isBarberAvailable(barber.id) && selectBarber(barber.id)">
             <div>
                 <div class="flex justify-center">
                     <img class="h-16 w-16 rounded-full object-cover" 
@@ -22,8 +22,9 @@
                     <p class="text-xs font-bold uppercase flex justify-center">{{barber.name}}</p>
                     <p class="text-xs font-bold uppercase flex justify-center">Barbeiro(a)</p>
                 </div>
+
                 <div class="flex justify-center mt-2">
-                    <div v-if="barber.status === 0">
+                    <div v-if="isBarberAvailable(barber.id)">
                         <div class="ml-2 inline-flex items-center px-3 py-1 text-red-500 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
                             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -54,7 +55,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { usePage } from '@inertiajs/vue3';
 
 export default {
     name: "CardBarber",
@@ -68,13 +70,25 @@ export default {
     setup(_, {emit}) {
 
         const barberSelected = ref(null);
+        const page = usePage()
 
         const selectBarber = (barberId) => {
             barberSelected.value = barberId;
             emit('barberSelected', barberId)
         }
 
+        const statusBarbers = page.props.flash.barbersBusy;
+
+        const isBarberAvailable = (barberId) => {
+            const barberUnavailableConditions = [
+                (barberId === 1 && !statusBarbers[1]),
+                (barberId === 4 && !statusBarbers[4])
+            ];
+            return barberUnavailableConditions.some(condition => condition);
+        }
+
         return {
+            isBarberAvailable,
             selectBarber, 
             barberSelected
         }

@@ -55,7 +55,7 @@
                                     </button>
             
                                     <button type="submit" 
-                                        @click="$emit('closeModal', clearForm)"
+                                        @click="closeModal()"
                                         class="inline-flex w-full justify-center rounded-md bg-red-600
                                         px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 
                                         sm:ml-3 sm:w-auto">Voltar
@@ -134,17 +134,14 @@ export default {
             })
         }
 
-        const clearForm = computed(() =>  {
-            if (description.value) {
-                description.value = ''
-                props.errors.description = ''
-                return;
-            }
-
-        })
+        const closeModal = () => {
+            description.value = ''
+            props.errors.description = ''
+            emit('closeModal');
+        }
 
         return {
-            clearForm,
+            closeModal,
             countCaracteres,
             cancelSchedule,
             processing,

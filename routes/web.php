@@ -42,6 +42,7 @@ Route::middleware('auth')
     Route::get('/schedules/my-schedules', [ScheduleController::class, 'mySchedules'])->name('schedules.mySchedules');
     Route::get('/schedules/type-service', [ScheduleController::class, 'typeForm'])->name('schedules.typeForm');
     Route::get('/schedules/get-dates', [ScheduleController::class, 'getDates'])->name('schedules.getDates');
+    Route::get('/schedules/get-barbers', [ScheduleController::class, 'getBarbers'])->name('schedules.getBarbers');
     
     Route::get('/create/{type}', [ScheduleController::class, 'create'])
     ->name('schedules.create')

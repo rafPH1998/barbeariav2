@@ -28,13 +28,13 @@
                         <div class="flex text-xs">
                             <p>Data selecionada:</p><span class="text-indigo-500 ml-1">{{ selectedDate }}</span>
                         </div>
-                        <div v-show="form.hour" class="flex">
+                        <div v-show="selectedHour" class="flex">
                             <p class="text-xs">Hora selecionada:</p>
                             <a 
                                 class="bg-indigo-600 px-1 ml-1
                                 text-white-700 font-semibold cursor-pointer
                                 border border-indigo-500 rounded text-xs">
-                                {{form.hour}}
+                                {{selectedHour}}
                             </a>
                         </div>
                     </div>
@@ -47,7 +47,12 @@
                         <div v-show="messageError">
                             <p class="text-red-600">{{ messageError }} <p class="text-white">Que tal agendar para outra data? =)</p></p>
                         </div>
-                        <div v-if="!form.hour">
+
+                        <div v-if="selectedHour">
+                            <h1 class="flex justify-center">Selecione um barbeiro</h1>
+                            <CardBarber :barbers="barbers" @barberSelected="getBarberSelected"/>
+                        </div>
+                        <div v-else>
                             <p v-show="form.date" class="text-xs">Selecione um horário</p>
                             <button 
                                 v-for="(buttonsHours, chave) in page.props.flash.success"
@@ -63,10 +68,6 @@
                                 {{buttonsHours}}
                             </button>
                         </div>
-                        <div v-else>
-                            <h1 class="flex justify-center">Selecione um barbeiro</h1>
-                            <CardBarber :barbers="barbers" @barberSelected="getBarberSelected"/>
-                        </div>
                     </div>
                     <div v-else class="p-2 w-full mt-6 flex items-center justify-center">
                         <SppinerLoading/>
@@ -74,7 +75,6 @@
                     </div>
 
                     <span v-if="errors.hour" class="text-red-600 text-xs ml-2">{{errors.hour}}</span>
-
                     <button-form 
                         :loader="shouldShowLoader">
                         <sppiner-loading v-show="form.processing"/>
@@ -82,12 +82,7 @@
                         <span v-else>Agendar</span>
                     </button-form>
 
-                    <Link :href="route('schedules.typeForm')" 
-                        class="mt-4 text-xs
-                        text-red-700
-                        text-center">
-                        Voltar
-                    </Link>
+                    <Link :href="route('schedules.typeForm')" class="mt-4 text-xs text-red-700 text-center">Voltar</Link>
                 </form>
             </div>
         </Main>
@@ -126,12 +121,13 @@
         type: page.props.service
     })
 
+    const messageError = computed(() => page.props.flash.error)
+    const selectedDate = computed(() => store.state.selectedDate)
+    const selectedHour = computed(() => store.state.selectedHour)
+    const barbers      = computed(() => page.props.flash.barbers)
 
-    const messageError     = computed(() => page.props.flash.error)
-    const selectedDate     = computed(() => store.state.selectedDate)
-    const barbers          = computed(() => page.props.flash.barbers)
     const shouldShowLoader = computed(() => {
-        return form.processing || props.schedules || !selectedDate.value || !form.barber || !form.hour
+        return form.processing || props.schedules || !selectedDate.value || !form.barber
     })
 
     const getDates = () => {
@@ -144,14 +140,29 @@
         })
     }
 
+    const chooseTime = (timeSelected) => {
+        form.date = selectedDate
+        form.hour = timeSelected
+
+        router.get('/schedules/get-barbers', form, {
+            onStart: () => (form.processingDates = true),
+            onFinish: () => {
+                form.processingDates = false
+                store.dispatch('setSelectedDate', form.date)
+                store.dispatch('setSelectedHour', form.hour)
+            }
+        })
+    }
+
     //reseta do vuex data selecionada
     store.dispatch('setSelectedDate', '')
+    store.dispatch('setSelectedHour', '')
 
-    const chooseTime = (timeSelected) => form.hour = timeSelected
     const getBarberSelected = (barberId) => form.barber = barberId
 
     const storeSchedule = () => {
         form.date = selectedDate
+        form.hour = selectedHour
 
         router.post('/schedules', form, {
             onStart: () => (form.processing = true), 

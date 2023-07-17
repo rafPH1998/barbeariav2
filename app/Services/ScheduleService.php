@@ -8,15 +8,17 @@ use Illuminate\Support\Facades\Http;
 class ScheduleService 
 {
     public static function notOpenSunday($request): bool
-    {
-        $diaDaSemana = Carbon::parse($request->date);
-        return $diaDaSemana->locale('pt_BR')->dayName == 'domingo' ? false : true;
+    {   
+        $date = str_replace('/', '-', $request->date);
+        $diaDaSemana = Carbon::parse($date)->locale('pt_BR');
+        return $diaDaSemana->dayOfWeek !== Carbon::SUNDAY;
     }
 
     public static function checkCalendarOfTheDay($request): bool
     {
-        $dateAndHour = Carbon::parse($request->date . ' 20:00:00');
-        return Carbon::now()->greaterThan($dateAndHour) ? true : false;
+        $date = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
+        $dateAndHour = Carbon::parse($date . ' 20:00:00');
+        return Carbon::now()->greaterThan($dateAndHour);
     }
 
     public static function calcularHorasAdicionais(string $servico): int

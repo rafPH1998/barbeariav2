@@ -100,4 +100,11 @@ class User extends Authenticatable
             'view_menu' => auth()->check() && $this->type === 'manager' ? true : false
         ];
     }
+
+    public function getBarbers()
+    {
+        return $this->select('id', 'name', 'status', 'image')
+                ->whereIn('type', ['manager', 'employee'])
+                ->get(); 
+    }
 }

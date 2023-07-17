@@ -1,7 +1,7 @@
 <template>
     <div 
         v-for="user in users" :key="user.id"
-        class="w-44 p-2 mt-4 ml-4 border-collapse border 
+        class="w-44 p-2 mt-4 ml-4 border-collapse border effect
         border-gray-700 rounded shadow flex justify-center 
         cursor-pointer animate__animated animate__fadeIn">
         <div>
