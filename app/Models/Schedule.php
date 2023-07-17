@@ -38,7 +38,7 @@ class Schedule extends Model
                 $carbon = Carbon::parse($value);
                 $date = $carbon->format('d/m/Y');
                 $hour = $carbon->format('H:i');
-               
+
                 return "Agendado por você em {$date} às {$hour}";
             }   
         );
@@ -100,8 +100,19 @@ class Schedule extends Model
     
         return $newHours;
     }
-    
+
     protected function hoursAvailableFuture(array $datasEnums, array $busy)
+    {
+        return $this->checkAvailability($datasEnums, $busy);
+    }
+    
+    protected function hoursAvailableToday(array $datasEnums, array $busy)
+    {
+        $selectedHour = now()->format('H:i');
+        return $this->checkAvailability($datasEnums, $busy, $selectedHour);
+    }
+    
+    protected function checkAvailability(array $datasEnums, array $busy, $selectedHour = null)
     {
         $newHours = [];
     
@@ -125,42 +136,15 @@ class Schedule extends Model
                 $newHours[] = $case;
             }
         }
-
-        return $newHours;
-    }
     
-
-    
-    protected function hoursAvailableToday(array $datasEnums, array $busy)
-    {
-        $selectedHour = now()->format('H:i');
-        
-        $availableTimes = collect($datasEnums)->filter(function ($case) use ($selectedHour) {
-            return $case->value > $selectedHour;
-        })->values()->toArray();
-    
-        $newHours = [];
-    
-        foreach ($availableTimes as $case) {
-            $resultHours = $case->value;
-            $barberName = $case->name;
-    
-            $isBusy = false;
-            foreach ($busy as $busyTime) {
-                if ($busyTime['hour'] == $resultHours && in_array($busyTime['barber'], [1, 4])) {
-                    $isBusy = true;
-                    break;
-                }
-            }
-    
-            if (!$isBusy || $resultHours == $selectedHour) {
-                $newHours[] = $resultHours;
-            }
+        if ($selectedHour) {
+            $newHours = collect($newHours)->filter(function ($case) use ($selectedHour) {
+                return $case->value > $selectedHour;
+            })->values()->toArray();
         }
     
         return $newHours;
-    }
-    
+    }    
 
     public function getSchedules(?string $status, ?string $date)
     {

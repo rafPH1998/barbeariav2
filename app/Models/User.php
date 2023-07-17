@@ -84,20 +84,14 @@ class User extends Authenticatable
     public static function getUserBirthdayData()
     {
         $dateCarbon = Carbon::now();
-        $dateCurrent = $dateCarbon->format('d');
-        $monthCurrent = $dateCarbon->format('m');
-        $dayAndMonth = $dateCurrent.'-'.$monthCurrent;
-
-        // Utilizando o operador "LIKE" para comparar apenas o dia e o mês
-        return self::whereRaw(
-                "DATE_FORMAT(birthday, '%d-%m') LIKE ?", [$dayAndMonth.'%']
-            );
+        return self::whereDay('birthday', '=',  $dateCarbon->format('d'))
+                ->whereMonth('birthday', '=', $dateCarbon->format('m'));
     }
 
     public function getPermissionsAttribute()
     {
         return [
-            'view_menu' => auth()->check() && $this->type === 'manager' ? true : false
+            'view_menu' => auth()->check() && $this->type === 'manager' || $this->type === 'employee' ? true : false
         ];
     }
 
