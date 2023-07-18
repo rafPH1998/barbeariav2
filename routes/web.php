@@ -18,8 +18,10 @@ use App\Http\Controllers\Auth\{
 
 use Illuminate\Support\Facades\Route;
 
+/*
+*Route para Home da pagina
+*/
 Route::get('/', HomeController::class)->name('index');
-
 
 /*
 *Route para login
@@ -37,16 +39,15 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 /*
 *Route para agendamentos
 */
-Route::middleware('auth')
-    ->group(function() {
+Route::middleware('auth')->group(function() {
     Route::get('/schedules/my-schedules', [ScheduleController::class, 'mySchedules'])->name('schedules.mySchedules');
     Route::get('/schedules/type-service', [ScheduleController::class, 'typeForm'])->name('schedules.typeForm');
     Route::get('/schedules/get-dates', [ScheduleController::class, 'getDates'])->name('schedules.getDates');
     Route::get('/schedules/get-barbers', [ScheduleController::class, 'getBarbers'])->name('schedules.getBarbers');
     
     Route::get('/create/{type}', [ScheduleController::class, 'create'])
-    ->name('schedules.create')
-    ->where('type', 'corte|corte_barba');
+            ->name('schedules.create')
+            ->where('type', 'corte|corte_barba');
     
     Route::resource('/schedules', ScheduleController::class)->only(['index', 'store']);
     Route::post('/schedules/canceleds', CanceledsSchedule::class)->name('canceled');

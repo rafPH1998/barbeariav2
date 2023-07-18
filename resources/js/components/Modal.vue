@@ -69,8 +69,6 @@
         </div>
 </template>
 
-
-
 <script>
 import { ref, computed } from 'vue'
 import { router, usePage } from '@inertiajs/vue3';

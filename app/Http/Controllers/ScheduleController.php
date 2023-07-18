@@ -25,13 +25,14 @@ class ScheduleController extends Controller
 
             $schedules = $this->schedules->getSchedules(
                 status: $request->status ?? '', 
-                date: $request->date ?? ''
+                date  : $request->date ?? ''
             );
-            $count_status = $this->schedules->countSchedules();
+
+            $countStatus = $this->schedules->countSchedules();
     
             return Inertia::render('Schedule/List', [
                 'schedules' => $schedules, 
-                'count_status' => $count_status,
+                'countStatus' => $countStatus,
                 'status' => $request->status,
                 'dateSelected' => $request->date
             ]);

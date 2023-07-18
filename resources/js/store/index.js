@@ -21,7 +21,7 @@ const actions = {
     setSelectedHour({ commit }, hour) {
         commit('SELECTED_HOUR', hour)
     }
-  }
+}
 
 export default {
     state,

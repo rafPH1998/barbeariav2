@@ -39,14 +39,17 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = null;
-        
+        $schedule = new Schedule();
+
         if (auth()->check()) {
-            $userId = auth()->user()->id;
+            $authUser = auth()->user();
+
             $user = User::withCount(['agenda' => function ($query) {
                 $query->where('status', 'pendente');
-            }])->find($userId);
+            }])->find($authUser->id);
 
-            $countSchedules = Schedule::where('status', '=', 'pendente')->get();
+            $countSchedules = $schedule->where('status', '=', 'pendente')
+                                    ->where('barber', '=', $schedule->getTypeBarber($authUser))->get();
         }
 
         return array_merge(parent::share($request), [

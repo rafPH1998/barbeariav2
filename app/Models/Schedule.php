@@ -89,8 +89,8 @@ class Schedule extends Model
     public function hoursAvailable(array $datasEnums, string $data)
     {
         $busy = $this->whereDate('date', '=', $data)
-            ->get(['hour', 'barber'])
-            ->toArray();
+                    ->get(['hour', 'barber'])
+                    ->toArray();
     
         if ($data > now()->format('Y-m-d')) {
             $newHours = $this->hoursAvailableFuture($datasEnums, $busy);
@@ -149,6 +149,7 @@ class Schedule extends Model
     public function getSchedules(?string $status, ?string $date)
     {
         $query = $this
+                ->where('barber', '=', $this->getTypeBarber(auth()->user()))
                 ->when(str($date)->isNotEmpty(), fn($query) => $query->where('date', '=', Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d')))
                 ->when($status == 'pendente' || $status == null, fn($query) => $query->where('status', '=', 'pendente'))
                 ->when($status == 'finalizado', fn($query) => $query->where('status', '=', 'finalizado'))
@@ -164,11 +165,19 @@ class Schedule extends Model
 
     public function countSchedules(): Object
     {
+        $typeBarber = $this->getTypeBarber(auth()->user());
+
         return $this->select(
-            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente") AS count_pending'),
-            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "finalizado") AS count_finished'),
-            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado") AS count_canceleds'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente" AND barber = ' . $typeBarber . ') AS count_pending'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "finalizado" AND barber = ' . $typeBarber . ') AS count_finished'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado" AND barber = ' . $typeBarber . ') AS count_canceleds'),
         )->first();
+    } 
+
+    public function getTypeBarber($authUser)
+    {
+        return ($authUser->type === 'manager') ? 1 : 
+               (($authUser->type === 'employee') ? 4 : '');
     }
 
     public function getMySchedules(): LengthAwarePaginator
@@ -177,11 +186,5 @@ class Schedule extends Model
                     ->select('schedules.*', 'canceleds.description', 'canceleds.user_id AS author_canceled_id')
                     ->where('schedules.user_id', auth()->user()->id)
                     ->paginate(3);   
-    }
-
-    
-      
-
-
-
+    }      
 }
