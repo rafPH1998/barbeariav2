@@ -187,4 +187,22 @@ class Schedule extends Model
                     ->where('schedules.user_id', auth()->user()->id)
                     ->paginate(3);   
     }      
+
+    public static function calculateScheduleTotals(?string $date)
+    {
+        $result = self::when(str($date)->isNotEmpty(), function($query) use ($date) {
+            return $query->where('date', '=', Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d'));
+        })->when(empty($date), function($query) {
+            return $query->whereDate('date', '=', now()->format('Y-m-d'));
+        })->selectRaw(
+            'COUNT(*) as total, 
+            SUM(status = "pendente") as pending,
+            SUM(status = "finalizado") as finalized,
+            SUM(status = "cancelado") as canceled,
+            SUM(price) as totalPrice,
+            (SELECT COUNT(*) FROM users) as totalUsers',
+        )->first();
+    
+        return $result;
+    }
 }

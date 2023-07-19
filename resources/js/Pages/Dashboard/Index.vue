@@ -14,7 +14,7 @@
                         <div>
                             <p class="text-indigo-300 text-sm font-medium uppercase leading-4">Total Clientes no sistema</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
-                                <span>208</span>
+                                <span>{{scheduleTotals.totalUsers === null ? 0 : scheduleTotals.totalUsers}}</span>
                                 <icon/>
                             </p>
                         </div>
@@ -31,7 +31,7 @@
                         <div>
                             <p class="text-teal-300 text-sm font-medium uppercase leading-4">Total de entrada do dia</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
-                                <span>$400,50</span>
+                                <span>${{formattedTotalPrice}}</span>
                                 <icon/>
                             </p>
                         </div>
@@ -47,7 +47,7 @@
                         <div>
                             <p class="text-blue-500 text-sm font-medium uppercase leading-4">Total de agenda do dia</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
-                                <span>100</span>
+                                <span>{{scheduleTotals.total === null ? 0 : scheduleTotals.total}}</span>
                                 <icon/>
                             </p>
                         </div>
@@ -59,7 +59,7 @@
                         <div>
                             <p class="text-yellow-300 text-sm font-medium uppercase leading-4">Agendas pendentes</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
-                                <span>10</span>
+                                <span>{{scheduleTotals.pending === null ? 0 : scheduleTotals.pending}}</span>
                             </p>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         <div>
                             <p class="text-green-500 text-sm font-medium uppercase leading-4">Agendas finalizadas</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
-                                <span>28</span>
+                                <span>{{scheduleTotals.finalized === null ? 0 : scheduleTotals.finalized}}</span>
                             </p>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                         <div>
                             <p class="text-red-500 text-sm font-medium uppercase leading-4">Agendas canceladas</p>
                             <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
-                                <span>2</span>
+                                <span>{{scheduleTotals.canceled === null ? 0 : scheduleTotals.canceled}}</span>
                             </p>
                         </div>
                     </div>
@@ -97,4 +97,17 @@ import Icon from '../../components/Icon.vue'
 import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
 import CheckPending from '../Auth/components/icons/CheckPending.vue';
+import { computed } from 'vue';
+
+const props = defineProps({scheduleTotals: Object})
+
+const formattedTotalPrice = computed(() => {
+    if (props.scheduleTotals.totalPrice === null || props.scheduleTotals.totalPrice === undefined) {
+        return "0.00";
+    } else {
+        const totalPriceNumber = Number(props.scheduleTotals.totalPrice);
+        return totalPriceNumber.toFixed(2);
+    }
+});
+
 </script>
