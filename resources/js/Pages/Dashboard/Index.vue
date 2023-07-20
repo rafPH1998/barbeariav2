@@ -86,7 +86,13 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
+        </div>
+        <div class="flex flex-row-reverse">
+            <button-form :typeButton="'cancel'">
+                <span>Baixar informações</span>
+            </button-form>
         </div>
     </Main>
 </template>
@@ -97,6 +103,7 @@ import Icon from '../../components/Icon.vue'
 import CheckSuccess from '../Auth/components/icons/CheckSuccess.vue';
 import CheckCancel from '../Auth/components/icons/CheckCancel.vue';
 import CheckPending from '../Auth/components/icons/CheckPending.vue';
+import ButtonForm from '../../Pages/Auth/components/ButtonForm.vue'
 import { computed } from 'vue';
 
 const props = defineProps({scheduleTotals: Object})
