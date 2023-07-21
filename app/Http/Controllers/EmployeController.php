@@ -32,36 +32,51 @@ class EmployeController extends Controller
             'birthday' => 'required',
         ]);
 
-        $data['type'] = 'employee';
-        $data['birthday'] = Carbon::createFromFormat('d/m/Y', $request->birthday)->format('Y-m-d');
-
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
+        try {
+            $this->authorize('create', User::class);
+    
+            $data['type'] = 'employee';
+            $data['birthday'] = Carbon::createFromFormat('d/m/Y', $request->birthday)->format('Y-m-d');
+    
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->password);
+            }
+      
+            User::query()->create($data);
+    
+            return redirect()->route('employees.index')->with('success', 'Funcionário criado com sucesso!');
+        } catch (\Throwable $th) {
+            return redirect()->route('dashboard');
         }
-  
-        User::query()->create($data);
-
-        return redirect()->route('employees.index')->with('success', 'Funcionário criado com sucesso!');
     }
 
     public function update(Request $request, $userId)
     {
-        User::where('id', '=', $userId)
-            ->update([
-                'status' => $request->status
-            ]);
+        try {    
+            $this->authorize('update', User::class);
+            User::where('id', '=', $userId)
+                ->update([
+                    'status' => $request->status
+                ]);
 
-        return redirect()->route('employees.index');
+            return redirect()->route('employees.index');
+        } catch (\Throwable $th) {
+            return redirect()->route('dashboard');
+        }
     }
-
 
     public function destroy(string $id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return redirect()
-            ->route('employees.index')
-            ->with('success', 'Cliente deletado com sucesso!');
+        try {
+            $this->authorize('destroy', User::class);
+            $user = User::findOrFail($id);
+            $user->delete();
+    
+            return redirect()
+                ->route('employees.index')
+                ->with('success', 'Cliente deletado com sucesso!');
+        } catch (\Throwable $th) {
+            return redirect()->route('dashboard');
+        }
     }
 }

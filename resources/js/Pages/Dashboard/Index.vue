@@ -90,7 +90,7 @@
             </div>
         </div>
         <div class="flex flex-row-reverse">
-            <button-form :typeButton="'cancel'">
+            <button-form :typeButton="'cancel'" @click.prevent="downloadCsv()">
                 <span>Baixar informações</span>
             </button-form>
         </div>
@@ -116,5 +116,9 @@ const formattedTotalPrice = computed(() => {
         return totalPriceNumber.toFixed(2);
     }
 });
+
+const downloadCsv = () => {
+    router.post('/dashboard-download')
+}
 
 </script>

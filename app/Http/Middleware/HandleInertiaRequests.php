@@ -64,7 +64,8 @@ class HandleInertiaRequests extends Middleware
                 'countSchedules' => auth()->check() ? $countSchedules : null
             ],
             'birthdaysOfTheDay' => $user ? $user->getUserBirthdayData()->count() : 0,
-            'permissions' => $user ? $user->permissions ?? '' : ''
+            'permissions' => $user ? $user->permissions ?? '' : '',
+            'permissionsToEmployee' => $user ? $user->permissionsToEmployee ?? '' : '',
         ]);
     }
 }

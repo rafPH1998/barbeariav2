@@ -3,7 +3,7 @@
         <div class="animate__animated animate__fadeIn"> 
             <h1 class="font-bold py-4 uppercase">Tabela de funcionários</h1>
 
-            <button-form @click="createEmployee()">
+            <button-form @click="createEmployee()" v-if="canViewButton">
                 Cadastrar funcionário
             </button-form>
 
@@ -54,7 +54,7 @@
                         <td class="py-3 px-2">{{employee.email}}</td>
                         <td class="p-3 px-5">
                             <select class="bg-white/10 rounded p-1" 
-                                    :disabled="loading"
+                                    :disabled="loading || !canViewButton"
                                     v-model="employee.status"
                                     @change="updatedStatus(employee.status, employee.id)"
                                 >
@@ -65,7 +65,7 @@
                         <td class="py-3 px-2 font-bold">R$ 23</td>                          
                         <td class="py-3 px-2">{{employee.created_at}}</td>   
                         <td class="py-3 px-2" v-if="employee.type !== 'manager'">
-                            <IconTrash @click.prevent="openModal(employee.id)"/>
+                            <IconTrash @click.prevent="openModal(employee.id)" v-if="canViewButton"/>
                         </td>                   
                     </tr> 
                 </tbody>                       
@@ -84,10 +84,11 @@ import { useToast } from "vue-toastification";
 import { router, usePage } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 
+const page = usePage()
 const props = defineProps({employees: Object, errors: Object})
+const canViewButton = computed(() => page.props.permissionsToEmployee.view_button_store_employee)
 
 const toast = useToast();
-
 const modal = ref({
     show  : false,
     create: false,

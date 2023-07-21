@@ -95,6 +95,16 @@ class User extends Authenticatable
         ];
     }
 
+    public function getPermissionsToEmployeeAttribute()
+    {
+        return [
+            'view_button_store_employee' => auth()->check() && $this->type === 'manager' ? true : false,
+            'store_employee' => auth()->check() && $this->type === 'manager' ? true : false,
+            'update_employee' => auth()->check() && $this->type === 'manager' ? true : false,
+            'delete_employee' => auth()->check() && $this->type === 'manager' ? true : false,
+        ];
+    }
+
     public function getBarbers()
     {
         return $this->select('id', 'name', 'status', 'image')
