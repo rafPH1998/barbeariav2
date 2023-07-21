@@ -14,17 +14,17 @@ class UserPolicy
         return $user->permissions['view_menu'];
     }
 
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->permissionsToEmployee['store_employee'];
     }
 
-    public function update(User $user)
+    public function update(User $user): bool
     {
         return $user->permissionsToEmployee['update_employee'];
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): bool
     {
         return $user->permissionsToEmployee['delete_employee'];
     }
