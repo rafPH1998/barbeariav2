@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     ProfileController,
     CanceledsSchedule,
     EmployeController,
+    ForgotPasswordController,
     ScheduleController,
     UserController
 };
@@ -35,6 +36,15 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 */
 Route::get('/register', [RegisterController::class, 'register'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+
+/**
+ * Route para registro e recuperamento de senha
+ */
+Route::get('forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forgot.password-send-link');
+/* Route::get('reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
+Route::post('reset-password', [ForgotPasswordController::class, 'updatePassword'])->name('password.update'); */
+
 
 /*
 *Route para agendamentos

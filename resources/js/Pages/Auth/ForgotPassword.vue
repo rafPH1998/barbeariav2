@@ -1,11 +1,13 @@
 <template>
 
-    <Head title="Login"/>
+    <Head title="Definir nova senha"/>
 
     <AuthLayout>
-        <h1 class="text-white">Login</h1>
+        <h1 class="text-white">Enviar link de redefinição de senha</h1>
 
-        <form @submit.prevent="login()" action="#" method="POST" class="flex flex-col mt-4">
+        <form @submit.prevent="sendLink()" action="#" method="POST" class="flex flex-col mt-4">
+            <span v-show="form.status !== ''" class="text-green-500">{{form.status}}</span>
+
             <input-field-text 
                 v-model="form.email" 
                 label="E-mail" 
@@ -13,23 +15,14 @@
                 type="email" 
                 :error="errors.email"
                 />
-            <input-field-text  
-                v-model="form.password" 
-                label="Senha" 
-                name="password" 
-                type="password" 
-                :error="errors.password"
-                />
-
-            <Link :href="route('forgot.password')" class="text-white flex justify-center text-xs mt-2">Esqueci minha senha</Link>
 
             <button-form :loader="form.processing">
                 <sppiner-loading v-show="form.processing"/>
-                <span v-if="form.processing">Logando...</span>
-                <span v-else>Entrar</span>
+                <span v-if="form.processing">Recuperando...</span>
+                <span v-else>Recuperar</span>
             </button-form>
 
-            <Link :href="route('register')" class="text-white flex justify-center text-xs mt-2">Não tem conta? Cadastre-se agora.</Link>
+            <Link :href="route('login')" class="text-white flex justify-center text-xs mt-2">Voltar</Link>
         </form>
     </AuthLayout>
 
@@ -41,24 +34,27 @@
     import ButtonForm from '../Auth/components/ButtonForm.vue'
     import SppinerLoading from '../../components/SppinerLoading.vue'
     import { Link, Head, router, usePage } from '@inertiajs/vue3';
-    import { reactive } from 'vue'
+    import { reactive, computed } from 'vue'
     import { useToast } from "vue-toastification";
     
     defineProps({
         errors: Object
     })
-
-    const form = reactive({
-        email: null,
-        password: null,
-        processing: false
-    })
     
     const page = usePage()
     const toast = useToast();
+    const status = computed(() => page.props);
 
-    const login = () => {
-        router.post('/login', form, {
+    const form = reactive({
+        email: null,
+        _token: page.props.csrf,
+        processing: false
+    })
+
+    console.log(status.value.status)
+
+    const sendLink = () => {
+        router.post('/forgot-password', form, {
             onStart: () => (form.processing = true), 
             onFinish: () => {
                 if (page.props.flash.error) {
@@ -69,4 +65,5 @@
             }
         })
     }
+
 </script>
