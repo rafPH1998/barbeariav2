@@ -162,6 +162,29 @@ class ScheduleController extends Controller
         ]);
     }
 
+    public function calendar()
+    {
+        // Obter informações sobre o mês atual
+        $carbon = now();
+        $currentMonth = $carbon->format('m');
+        $currentYear = $carbon->format('Y');
+        $currentDay = $carbon->format('d');
+        $firstDayMonth = Carbon::createFromDate($currentYear, $currentMonth, 1)->dayOfWeek;
+        $lastDayMonth = Carbon::createFromDate($currentYear, $currentMonth, 1)->endOfMonth()->day;
+
+        // Array com os nomes dos dias da semana
+        $daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+        return Inertia::render('Schedule/Calendar', [
+            'currentMonth' => $currentMonth,
+            'currentYear' => $currentYear,
+            'currentDay' => $currentDay,
+            'firstDayMonth' => $firstDayMonth,
+            'lastDayMonth' => $lastDayMonth,
+            'daysOfWeek' => $daysOfWeek
+        ]);
+    }
+
     private function performInitialValidations(Request $request)
     {
         session()->forget('dates');
@@ -186,5 +209,6 @@ class ScheduleController extends Controller
 
         return null;
     }
+
 
 }

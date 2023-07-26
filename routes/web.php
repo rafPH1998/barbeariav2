@@ -38,7 +38,7 @@ Route::get('/register', [RegisterController::class, 'register'])->name('register
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 /**
- * Route para registro e recuperamento de senha
+ * Route para recuperamento de senha
  */
 Route::get('forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('forgot.password');
 Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forgot.password-send-link');
@@ -50,6 +50,7 @@ Route::post('reset-password', [ForgotPasswordController::class, 'updatePassword'
 *Route para agendamentos
 */
 Route::middleware('auth')->group(function() {
+    Route::get('/schedules/calendar', [ScheduleController::class, 'calendar'])->name('schedules.calendar');
     Route::get('/schedules/my-schedules', [ScheduleController::class, 'mySchedules'])->name('schedules.mySchedules');
     Route::get('/schedules/type-service', [ScheduleController::class, 'typeForm'])->name('schedules.typeForm');
     Route::get('/schedules/get-dates', [ScheduleController::class, 'getDates'])->name('schedules.getDates');
