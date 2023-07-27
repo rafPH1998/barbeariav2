@@ -7,7 +7,15 @@
                     <h3 v-if="index === 0 || props.schedules[index - 1].date !== schedule.date" class="text-white font-bold p-1 mt-2">
                         Dia {{ schedule.date }}
                     </h3>
-                    <p class="text-white font-bold bg-indigo-600 rounded p-1 mt-2">{{ schedule.hour }}</p>
+
+                    <p class="text-white font-bold bg-indigo-600 rounded p-1 mt-2 flex">
+                        {{ schedule.hour }} - Barbeiro ({{schedule.name}})
+                        <img class="h-6 w-6 rounded-full ml-2" 
+                            :src="[
+                                schedule.user_image ? '/storage/' + schedule.user_image : '/assets/images/user.svg'
+                            ]"
+                        >
+                    </p>
 
                     <hr class="mt-6 border-collapse border border-gray-700" 
                         v-if="index < props.schedules.length - 1 && props.schedules[index + 1].date !== schedule.date"
@@ -33,6 +41,8 @@ import { defineProps } from 'vue';
 const props = defineProps({
     schedules: Array
 });
+
+console.log(props.schedules)
 
 const scrollToTop = () => {
   window.scrollTo({

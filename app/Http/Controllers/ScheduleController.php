@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
+
 
 class ScheduleController extends Controller
 {
@@ -166,9 +168,10 @@ class ScheduleController extends Controller
     public function calendar()
     {
         $schedules = $this->schedules
-                    ->select('id', 'date', 'hour')
-                    ->where('status', '=', 'pendente')
+                    ->select('schedules.id', 'schedules.date', 'schedules.hour', 'users.id as user_id', 'users.name', 'users.image as user_image')
+                    ->where('schedules.status', '=', 'pendente')
                     ->orderByRaw('date ASC, hour ASC')
+                    ->join('users', 'schedules.barber', '=', 'users.id')
                     ->get();
 
         return Inertia::render('Schedule/Calendar', ['schedules' => $schedules]);
