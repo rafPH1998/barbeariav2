@@ -1,82 +1,44 @@
 <template>
     <div>
-      <Main>
-        <div class="p-6">
-            <h2 class="text-3xl font-semibold mb-4">
-                Calendário {{  currentDay + '-' + currentMonth + '-' + currentYear }}
-            </h2>
-            <table class="w-full">
-                <tr>
-                    <th class="p-2 border-collapse border-r border-gray-700 h-10 xl:w-40 lg:w-30 md:w-30 sm:w-20 w-10 xl:text-sm text-xs text-white font-bold" v-for="dia in daysOfWeek" :key="dia">{{ dia }}</th>
-                </tr>
-                <tr class="text-center text-xs" v-for="(week, index) in weeks" :key="index">
-                    <td class="border-collapse border border-gray-700 p-1 h-40 xl:w-40 lg:w-30 md:w-30 sm:w-20 w-10 overflow-auto transition cursor-pointer duration-500 ease hover:bg-white/10" v-for="day in week" :key="day">
-                        <div class="flex justify-center items-center h-full">
-                            <span class="text-white font-bold" v-if="day !== 0">{{ day }}<br>
-                                <div class="text-center">
-                                    <p class="text-green-500 mt-5">Disponíveis</p>
-                                    <div class="mt-5">
-                                        <p class="text-white font-bold bg-green-700 rounded p-1 mt-2" v-if="day !== 0" v-for="hour in hours" :key="hour">{{ hour }}</p>
-                                    </div>
-                                </div>
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-      </Main>
+        <Main>
+            <div class="p-6">
+                <h2 class="mb-4 font-bold py-4 uppercase">Calendário de agendas</h2>
+                <div v-for="(schedule, index) in props.schedules" :key="schedule.id">
+                    <h3 v-if="index === 0 || props.schedules[index - 1].date !== schedule.date" class="text-white font-bold p-1 mt-2">
+                        Dia {{ schedule.date }}
+                    </h3>
+                    <p class="text-white font-bold bg-indigo-600 rounded p-1 mt-2">{{ schedule.hour }}</p>
+
+                    <hr class="mt-6 border-collapse border border-gray-700" 
+                        v-if="index < props.schedules.length - 1 && props.schedules[index + 1].date !== schedule.date"
+                    >
+                </div>
+            </div>
+            
+            <button @click="scrollToTop" class="fixed right-4 bottom-4 p-2 bg-indigo-600 text-white rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
+                </svg>
+            </button>
+        </Main>
     </div>
 </template>
+
+  
   
 <script setup>
 import Main from '../Layouts/Main.vue';
-import {computed} from 'vue'
+import { defineProps } from 'vue';
 
 const props = defineProps({
-    currentMonth: String,
-    currentYear: String, 
-    currentDay: String, 
-    firstDayMonth: Number,
-    lastDayMonth: Number,
-    daysOfWeek: Array
+    schedules: Array
 });
 
-const weeks = computed(() => {
-
-    const weeks = [];
-    let week = [];
-    let dayCounter = 1;
-
-    for (let i = 0; i < props.firstDayMonth; i++) {
-        week.push(0);
-    }
-
-    while (dayCounter <= props.lastDayMonth) {
-        week.push(dayCounter);
-        if (week.length === 7) {
-            weeks.push(week);
-            week = [];
-        }
-        dayCounter++;
-    }
-
-    if (week.length > 0) {
-        while (week.length < 7) {
-            week.push(0);
-        }
-        weeks.push(week);
-    }
-
-    return weeks;
-})
-
-const hours = [];
-for (let hour = 8; hour <= 20; hour++) {
-    const formattedTime = `${hour.toString().padStart(2, '0')}:00`;
-    hours.push(formattedTime);
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 }
-
 </script>
- 
   

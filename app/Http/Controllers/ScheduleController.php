@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\AvailableTimeEnum;
 use App\Models\Schedule;
 use App\Models\User;
+use App\Services\CalendarService;
 use App\Services\ScheduleService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -164,25 +165,13 @@ class ScheduleController extends Controller
 
     public function calendar()
     {
-        // Obter informações sobre o mês atual
-        $carbon = now();
-        $currentMonth = $carbon->format('m');
-        $currentYear = $carbon->format('Y');
-        $currentDay = $carbon->format('d');
-        $firstDayMonth = Carbon::createFromDate($currentYear, $currentMonth, 1)->dayOfWeek;
-        $lastDayMonth = Carbon::createFromDate($currentYear, $currentMonth, 1)->endOfMonth()->day;
+        $schedules = $this->schedules
+                    ->select('id', 'date', 'hour')
+                    ->where('status', '=', 'pendente')
+                    ->orderByRaw('date ASC, hour ASC')
+                    ->get();
 
-        // Array com os nomes dos dias da semana
-        $daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-
-        return Inertia::render('Schedule/Calendar', [
-            'currentMonth' => $currentMonth,
-            'currentYear' => $currentYear,
-            'currentDay' => $currentDay,
-            'firstDayMonth' => $firstDayMonth,
-            'lastDayMonth' => $lastDayMonth,
-            'daysOfWeek' => $daysOfWeek
-        ]);
+        return Inertia::render('Schedule/Calendar', ['schedules' => $schedules]);
     }
 
     private function performInitialValidations(Request $request)
