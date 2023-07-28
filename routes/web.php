@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     AssessmentsController,
+    BarberController,
     DashboardController,
     HomeController,
     ProfileController,
@@ -67,6 +68,12 @@ Route::middleware('auth')->group(function() {
     *Route para dashboard
     */
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+    /*
+    *Route para barbeiros
+    */
+    Route::get('/barbers', [BarberController::class, 'index'])->name('barbers');
+    Route::post('/barbers', [BarberController::class, 'store'])->name('barbers');
 
     /*
     *Route para dashboard

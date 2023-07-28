@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -107,8 +108,15 @@ class User extends Authenticatable
 
     public function getBarbers()
     {
-        return $this->select('id', 'name', 'status', 'image')
-                ->whereIn('type', ['manager', 'employee'])
-                ->get(); 
+        return $this
+            ->select('users.id', 'users.name', 'users.status', 'users.image', 'likes.user_id', DB::raw('COUNT(likes.id) as likes_count'))
+            ->whereIn('users.type', ['manager', 'employee'])
+            ->leftJoin('likes', 'users.id', '=', 'likes.barber')
+            ->groupBy('users.id', 'users.name', 'users.status', 'users.image', 'likes.user_id')
+            ->get();
     }
+
+
+    
 }
+

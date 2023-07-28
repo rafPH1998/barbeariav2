@@ -31,8 +31,6 @@
         </Main>
     </div>
 </template>
-
-  
   
 <script setup>
 import Main from '../Layouts/Main.vue';
@@ -41,8 +39,6 @@ import { defineProps } from 'vue';
 const props = defineProps({
     schedules: Array
 });
-
-console.log(props.schedules)
 
 const scrollToTop = () => {
   window.scrollTo({

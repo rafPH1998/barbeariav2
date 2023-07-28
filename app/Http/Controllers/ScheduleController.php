@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Enums\AvailableTimeEnum;
 use App\Models\Schedule;
 use App\Models\User;
-use App\Services\CalendarService;
 use App\Services\ScheduleService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Arr;
 
 class ScheduleController extends Controller
 {
@@ -98,25 +96,24 @@ class ScheduleController extends Controller
     public function getBarbers(Request $request)
     {        
         $barbers = $this->user->getBarbers();
-        $barbersAvailable = Schedule::distinct('barber')->pluck('barber');
-        
-        $availability = [];
-    
-        foreach ($barbersAvailable as $barber) {
-            $isAvailable = Schedule::where('barber', $barber)
-                ->where('date', Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d'))
+        $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
+        $barberIds = Arr::pluck($barbers, 'id');
+
+        foreach ($barberIds as $barberId) {
+            $isAvailable = Schedule::where('barber', $barberId)
+                ->where('date', $date)
                 ->where('hour', $request->hour)
                 ->exists();
-    
-            $availability[$barber] = !$isAvailable;
+
+            $availability[$barberId] = !$isAvailable;
         }
 
         return redirect()
-                ->route('schedules.create', $request->type)
-                ->with([
-                    'barbersBusy' => $availability,
-                    'barbers' => $barbers,
-                ]);
+            ->route('schedules.create', $request->type)
+            ->with([
+                'barbersBusy' => $availability,
+                'barbers' => $barbers,
+            ]);
     }
 
     public function store(Request $request)
