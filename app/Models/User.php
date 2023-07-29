@@ -108,15 +108,18 @@ class User extends Authenticatable
 
     public function getBarbers()
     {
+        $userId = auth()->user()->id;
+
         return $this
-            ->select('users.id', 'users.name', 'users.status', 'users.image', 'likes.user_id', DB::raw('COUNT(likes.id) as likes_count'))
-            ->whereIn('users.type', ['manager', 'employee'])
+            ->select('users.id', 'users.name', 'users.image', 
+                DB::raw('COUNT(likes.id) as likes_count'), 
+                DB::raw('MAX(likes.user_id = '.$userId.') as like_status')
+            )
             ->leftJoin('likes', 'users.id', '=', 'likes.barber')
-            ->groupBy('users.id', 'users.name', 'users.status', 'users.image', 'likes.user_id')
+            ->whereIn('users.type', ['manager', 'employee'])
+            ->groupBy('users.id', 'users.name', 'users.image')
             ->get();
     }
 
-
-    
 }
 

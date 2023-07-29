@@ -24,9 +24,9 @@
                         
                         <div class="flex justify-center items-center mt-4">
                             <IconHeartDefault  
+                                :isDisabled="'true'"
                                 v-if="!isBarberLiked(barber.id) 
-                                && userAuth.id !== barber.user_id 
-                                || barber.user_id === null"
+                                && (!barber.like_status || barber.like_status.length === 0)"
                                 @click="toggleLikeBarber(barber.id)" 
                             />
                             <IconHeartWithBgColor 
@@ -45,13 +45,11 @@
 import Main from '../Layouts/Main.vue';
 import IconHeartDefault from '../../components/IconHeartDefault.vue'
 import IconHeartWithBgColor from '../../components/IconHeartWithBgColor.vue'
-import { router, usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue'
+import { router } from '@inertiajs/vue3';
+import { ref } from 'vue'
 
 const props = defineProps({ barbers: Object });
 const likedBarbers = ref([]); 
-const page = usePage()
-const userAuth = computed(() => page.props.flash.user)
 
 const isBarberLiked = (barberId) => {
   return likedBarbers.value.includes(barberId);
