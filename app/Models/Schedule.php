@@ -151,12 +151,13 @@ class Schedule extends Model
         $query = $this
                 ->where('barber', '=', $this->getTypeBarber(auth()->user()))
                 ->when(str($date)->isNotEmpty(), fn($query) => $query->where('date', '=', Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d')))
-                ->when($status == 'pendente' || $status == null, fn($query) => $query->where('status', '=', 'pendente'))
+                ->when($status == 'pendente' || $status == null,  fn($query) => $query->where('status', '=', 'pendente'))
                 ->when($status == 'finalizado', fn($query) => $query->where('status', '=', 'finalizado'))
                 ->when($status == 'cancelado', fn($query) => $query->where('status', '=', 'cancelado'))
                 ->select('*', 
                     DB::raw('(SELECT description FROM canceleds WHERE canceleds.schedule_id = schedules.id) AS cancellation_reason')
                 )
+                ->whereDate('date', '=', now()->format('Y-m-d'))
                 ->with('user:id,name,image')
                 ->orderBy('date', 'ASC');
 
@@ -166,13 +167,13 @@ class Schedule extends Model
     public function countSchedules(): Object
     {
         $typeBarber = $this->getTypeBarber(auth()->user());
-
+    
         return $this->select(
-            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente" AND barber = ' . $typeBarber . ') AS count_pending'),
-            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "finalizado" AND barber = ' . $typeBarber . ') AS count_finished'),
-            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado" AND barber = ' . $typeBarber . ') AS count_canceleds'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "pendente" AND barber = ' . $typeBarber . ' AND DATE(date) = CURDATE()) AS count_pending'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "finalizado" AND barber = ' . $typeBarber . ' AND DATE(date) = CURDATE()) AS count_finished'),
+            DB::raw('(SELECT COUNT(*) FROM schedules WHERE status = "cancelado" AND barber = ' . $typeBarber . ' AND DATE(date) = CURDATE()) AS count_canceleds')
         )->first();
-    } 
+    }
 
     public function getTypeBarber($authUser)
     {
@@ -201,7 +202,8 @@ class Schedule extends Model
             SUM(status = "cancelado") as canceled,
             SUM(price) as totalPrice,
             (SELECT COUNT(*) FROM users) as totalUsers',
-        )->first();
+        )
+        ->first();
     
         return $result;
     }

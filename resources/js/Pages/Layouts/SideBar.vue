@@ -163,7 +163,7 @@
                     </div>
                 </div>
             </Link>
-            <Link :href="route('barbers')"
+            <Link :href="route('barbers')" :class="{'bg-white/10': $page.url === '/barbers'}"
                 class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
                 <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
                     <img class="h-6 w-6 rounded-full  bg-indigo-500" src="/assets/images/barbeiro.png">

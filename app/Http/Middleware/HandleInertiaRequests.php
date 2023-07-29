@@ -49,6 +49,7 @@ class HandleInertiaRequests extends Middleware
             }])->find($authUser->id);
 
             $countSchedules = $schedule->where('status', '=', 'pendente')
+                                    ->whereDate('date', '=', now()->format('Y-m-d'))
                                     ->where('barber', '=', $schedule->getTypeBarber($authUser))->get();
         }
 

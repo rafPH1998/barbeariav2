@@ -11,9 +11,9 @@
                     cursor-pointer animate__animated animate__fadeIn">
                     <div>
                         <div class="flex justify-center">
-                            <img class="h-16 w-16 rounded-full object-cover" 
+                            <img class="h-16 w-16 rounded-full object-cover bg-red-500" 
                                 :src="[
-                                    barber.image ? '/storage/' + barber.image : '/assets/images/user.svg'
+                                    barber.image ? '/storage/' + barber.image : '/assets/images/barbeiro.png'
                                 ]"
                             >
                         </div>
