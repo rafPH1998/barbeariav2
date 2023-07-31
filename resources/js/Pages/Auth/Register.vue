@@ -46,7 +46,7 @@
     import { useToast } from "vue-toastification";
     import { formatDate } from '../../funcoes/formaDate'
 
-    defineProps({
+    const props = defineProps({
         errors: Object
     })
 
@@ -68,13 +68,23 @@
             onStart: () => (form.processing = true), 
             onFinish: () => {
                 if (page.props.flash.success) {
-                    router.get('/dashboard')
                     toast.success(`Sucesso! ${page.props.flash.success} :)`)
+                    resetForm()
                 }
                 form.processing = false
             }
         })
     }
+
+    const resetForm = () => {
+        Object.keys(form).forEach((key) => {
+            form[key] = null;
+        });
+
+        Object.keys(props.errors).forEach((key) => {
+            props.errors[key] = '';
+        });
+    };
 
     const handleInput = (event) => {
         const input = event.target;

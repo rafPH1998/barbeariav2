@@ -24,7 +24,14 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials)) {
             return redirect()->route('login')->with('error', 'E-mail e/ou senha inválidos');
         }
-        return redirect()->route('dashboard');
+
+        $loggedUser = auth()->user();
+        if ($loggedUser->type === 'manager' || $loggedUser->type === 'employee') {
+            return redirect()->route('dashboard');
+        } else {
+            return redirect()->route('schedules.mySchedules');
+        }
+       
     }
 
     public function logout(Request $request)
