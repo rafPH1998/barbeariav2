@@ -16,7 +16,7 @@
         </a>
         <hr class="my-2 border-slate-700">
         <div id="menu" class="flex flex-col space-y-2 my-5">
-            <Link :href="route('dashboard')" :class="{ 'bg-white/10': $page.url === '/dashboard' }"
+            <Link v-if="canView" :href="route('dashboard')" :class="{ 'bg-white/10': $page.url === '/dashboard' }"
                 class="hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group">
                 <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
                     <IconDashboard/>
@@ -212,6 +212,4 @@ const birthdaysOfTheDay = computed(() => page.props.birthdaysOfTheDay)
 const isMenuOpen = (url) => {
     subMenu.value = !subMenu.value
 }
-
-
 </script>
