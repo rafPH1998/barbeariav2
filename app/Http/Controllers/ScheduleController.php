@@ -164,14 +164,27 @@ class ScheduleController extends Controller
 
     public function calendar()
     {
-        $schedules = $this->schedules
-                    ->select('schedules.id', 'schedules.date', 'schedules.hour', 'users.id as user_id', 'users.name', 'users.image as user_image')
-                    ->where('schedules.status', '=', 'pendente')
-                    ->orderByRaw('date ASC, hour ASC')
-                    ->join('users', 'schedules.barber', '=', 'users.id')
-                    ->get();
+        $schedules = $this->schedules->getCalendar();
+        $schedulesAvailableByDate = [];
 
-        return Inertia::render('Schedule/Calendar', ['schedules' => $schedules]);
+        foreach ($schedules as $schedule) {
+            $date = $schedule->date;
+
+            // Check if the date already has available hours array
+            if (!isset($schedulesAvailableByDate[$date])) {
+                $schedulesAvailableByDate[$date] = AvailableTimeEnum::cases();
+            }
+
+            // Remove the booked hour from the available hours for this date
+            $schedulesAvailableByDate[$date] = array_filter($schedulesAvailableByDate[$date], function ($horario) use ($schedule) {
+                return $horario->value !== $schedule->hour;
+            });
+        }
+
+        return Inertia::render('Schedule/Calendar', [
+            'schedules' => $schedules,
+            'availableHours' => array_values($schedulesAvailableByDate)
+        ]);
     }
 
     private function performInitialValidations(Request $request)

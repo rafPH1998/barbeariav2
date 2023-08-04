@@ -207,4 +207,19 @@ class Schedule extends Model
     
         return $result;
     }
+
+    public function getCalendar()
+    {
+        $calendar = $this->select(
+                'schedules.id', 
+                'schedules.date', 
+                'schedules.hour', 
+                'users.id as user_id', 'users.name', 'users.image as user_image'
+            )->where('schedules.status', '=', 'pendente')
+            ->orderByRaw('date ASC, hour ASC')
+            ->join('users', 'schedules.barber', '=', 'users.id')
+            ->get();
+            
+        return $calendar;
+    }
 }
