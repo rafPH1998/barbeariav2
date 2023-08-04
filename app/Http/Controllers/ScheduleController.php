@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\AvailableTimeEnum;
 use App\Models\Schedule;
 use App\Models\User;
+use App\Services\CalendarService;
 use App\Services\ScheduleService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,6 +17,7 @@ class ScheduleController extends Controller
 {
     public function __construct(
         protected Schedule $schedules,
+        protected CalendarService $calendarService,
         protected User $user
     ){ }
 
@@ -161,33 +163,22 @@ class ScheduleController extends Controller
             'mySchedules'=>$this->schedules->getMySchedules()
         ]);
     }
+    
 
     public function calendar()
     {
         $schedules = $this->schedules->getCalendar();
-        $schedulesAvailableByDate = [];
-
-        foreach ($schedules as $schedule) {
-            $date = $schedule->date;
-
-            // Check if the date already has available hours array
-            if (!isset($schedulesAvailableByDate[$date])) {
-                $schedulesAvailableByDate[$date] = AvailableTimeEnum::cases();
-            }
-
-            // Remove the booked hour from the available hours for this date
-            $schedulesAvailableByDate[$date] = array_filter($schedulesAvailableByDate[$date], function ($horario) use ($schedule) {
-                return $horario->value !== $schedule->hour;
-            });
-        }
+        $schedulesAvailableByDate = $this->calendarService->getAvailableHoursByDate($schedules);
+        $newHours = $this->calendarService->filterAvailableHoursByDate($schedulesAvailableByDate);
 
         return Inertia::render('Schedule/Calendar', [
             'schedules' => $schedules,
-            'availableHours' => array_values($schedulesAvailableByDate)
+            'availableHours' => $newHours,
         ]);
     }
 
-    private function performInitialValidations(Request $request)
+
+    protected function performInitialValidations(Request $request)
     {
         session()->forget('dates');
 
@@ -211,6 +202,9 @@ class ScheduleController extends Controller
 
         return null;
     }
+
+
+
 
 
 }
