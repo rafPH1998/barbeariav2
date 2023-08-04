@@ -54,6 +54,12 @@
                                 {{schedule.service == 'corte' ? '30' : '45'}}min*
                             </span>
                         </div>
+                        <div class="flex ml-2">
+                            <p class="font-bold">Barbeiro:</p>
+                            <span class="ml-2 text-gray-500">
+                                {{schedule.barber_name}}
+                            </span>
+                        </div>
                         <div v-if="schedule.status === 'cancelado'">
                             <div class="flex ml-2">
                                 <p class="font-bold">Quem cancelou:</p>
@@ -115,9 +121,15 @@ import { useToast } from "vue-toastification";
 import { usePage, router } from '@inertiajs/vue3';
 
 const props = defineProps({
-    mySchedules: Object,
-    errors: Object
+    mySchedules: {
+        type: Object
+    },
+    errors: {
+        type: Object
+    }
 })
+
+console.log(props.mySchedules)
 
 const toast = useToast();
 const page = usePage()

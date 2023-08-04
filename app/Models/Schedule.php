@@ -184,9 +184,10 @@ class Schedule extends Model
     public function getMySchedules(): LengthAwarePaginator
     {
         return $this->leftJoin('canceleds', 'schedules.id', '=', 'canceleds.schedule_id')
-                    ->select('schedules.*', 'canceleds.description', 'canceleds.user_id AS author_canceled_id')
-                    ->where('schedules.user_id', auth()->user()->id)
-                    ->paginate(3);   
+                ->join('users', 'schedules.barber', '=', 'users.id')
+                ->select('schedules.*', 'canceleds.description', 'canceleds.user_id AS author_canceled_id', 'users.name AS barber_name')
+                ->where('schedules.user_id', auth()->user()->id)
+                ->paginate(3);
     }      
 
     public static function calculateScheduleTotals(?string $date)
@@ -219,7 +220,7 @@ class Schedule extends Model
             ->orderByRaw('date ASC, hour ASC')
             ->join('users', 'schedules.barber', '=', 'users.id')
             ->get();
-            
+
         return $calendar;
     }
 }
