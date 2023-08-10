@@ -5,6 +5,7 @@
                 <form action="#" method="POST" @submit.prevent="storePlan()">
                     <div class="-mx-3 mb-6 mt-2 p-8">
                         <h1 class="font-bold uppercase">Cadastrar serviço</h1>
+
                         <div class="border-collapse border border-gray-700 mt-4 rounded p-8 flex">
                             <input-profile 
                                 v-model="form.name_plan" 
@@ -22,7 +23,7 @@
                                 placeholder="(Apenas números)"
                                 />
                             <input-profile 
-                                v-model="form.price_plan" 
+                                v-model="formattedPrice" 
                                 label="Preço do serviço" 
                                 name="price_plan" 
                                 type="text" 
@@ -48,14 +49,11 @@ import ButtonForm from '../Auth/components/ButtonForm.vue';
 import InputProfile from '../Profile/components/InputProfile.vue';
 import { router, usePage } from '@inertiajs/vue3';
 import { useToast } from "vue-toastification";
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 
-defineProps({
-    errors: Object
-})
+defineProps({ errors: Object })
 
 const toast = useToast();
-
 const form = reactive({
     name_plan: null,
     time_plan: null,
@@ -74,9 +72,24 @@ const storePlan = () => {
                 toast.success(`Sucesso! ${msgSuccess} :)`)
                 router.get('/services')
             }
-
         }
-        
     })
 }
+
+const formattedPrice = computed({
+    get() {
+        return form.price_plan;
+    },
+    set(newValue) {
+        let value = newValue.replace(/\D/g, '');
+
+        if (value.length > 0) {
+            value = parseFloat(value);
+            value = (value / 100).toFixed(2);
+            form.price_plan = value.toString().replace('.', ',');
+        } else {
+            form.price_plan = '';
+        }
+    }
+})
 </script>

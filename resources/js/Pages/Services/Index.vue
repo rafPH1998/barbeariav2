@@ -27,7 +27,7 @@
                                 <td class="py-3 px-2">{{ services.id }}</td>
                                 <td class="py-3 px-2">{{ services.name_plan }}</td>
                                 <td class="py-3 px-2">{{ services.time_plan }}min</td>
-                                <td class="py-3 px-2">R$ {{  services.price_plan }},00 </td>
+                                <td class="py-3 px-2">R$ {{  services.price_plan }}</td>
                                 <td class="py-3 px-2">
                                     <IconTrash @click.prevent="openModal(services.id)"/>
                                 </td>
