@@ -36,7 +36,12 @@
                         </a>
                     </div>
                     <div class="flex flex-col px-4 py-1">
-                        <h1 class=""> {{schedule.service == 'corte' ? 'corte' : 'corte + barba'}}</h1>
+                        <div class="flex ml-2">
+                            <p class="font-bold">Serviço:</p>
+                            <span class="ml-2 text-gray-500">
+                                {{schedule.service}}
+                            </span>
+                        </div>
                         <div class="flex ml-2">
                             <p class="font-bold">Status:</p>
                             <span class="ml-2 text-gray-500 flex"> 

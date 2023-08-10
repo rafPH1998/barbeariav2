@@ -1,13 +1,14 @@
 <template>
-     <div class="border-collapse border border-gray-700 rounded-lg drop-shadow-xl p-10 ml-6">
-        <div class="flex justify-center w-full">
+    <div class="flex">
+        <div class="border-collapse border border-gray-700 rounded-lg drop-shadow-xl p-10 ml-4"  
+            v-for="services in servicesObject" :key="services.id">
             <div>
-                <span class="flex justify-center">{{ nameService }}</span>
-                <p class="flex justify-center text-white mt-4 text-xs">{{hour}}</p>
-                <span class="flex justify-center mt-2 font-bold">R$ {{price}}</span>
+                <span class="flex justify-center">{{ services.name_plan }}</span>
+                <p class="flex justify-center text-white mt-4 text-xs">{{services.time_plan}} min</p>
+                <span class="flex justify-center mt-2 font-bold">R$ {{services.price_plan}}</span>
 
                 <Link 
-                    :href="route('schedules.create', typeService)"
+                    :href="route('schedules.create', services.name_plan)"
                     type="button"
                     class="bg-indigo-500 hover:bg-indigo-600
                     font-bold py-2 px-4 rounded-full
@@ -23,22 +24,10 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
-defineProps({
-    nameService: {
-        type: String,
+const props = defineProps({
+    servicesObject: {
+        type: Object,
         required: true,
-    },
-    hour: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: String,
-        required: true,
-    },
-    typeService: {
-        type: String,
-        required: true,
-    },
+    }
 })
 </script>

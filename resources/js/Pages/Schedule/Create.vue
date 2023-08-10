@@ -101,6 +101,7 @@
 
     const props = defineProps({
         service: String,
+        pricePlan: String,
         schedules: Boolean,
         dateSelected: Array,
         errors: Object
@@ -115,6 +116,7 @@
         date: null,
         hour: null,
         barber: null,
+        pricePlan: props.pricePlan,
         _token: page.props.csrf,
         processing: false,
         processingDates: false,

@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete("CASCADE");
             $table->date('date');
             $table->string('end_service')->nullable();
             $table->string('hour');
             $table->integer('price')->nullable();
             $table->enum('status', ['pendente', 'cancelado', 'finalizado']);
-            $table->enum('service', ['corte', 'corte_barba']);
+            $table->string('service');
             $table->string('barber');
+            $table->foreignId('user_id')->constrained('users')->onDelete("CASCADE");
             $table->timestamps();
         });
     }

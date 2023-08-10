@@ -10,7 +10,8 @@
             <ModalDelete 
                 :modal="modal" 
                 @closeModal="modal.show = false" 
-                @deleteUser="deleteUser(modal.userId)"
+                :type="'funcionário'"
+                @delete="deleteUser(modal.userId)"
             />
 
             <!-- modal para cadastrar um funcionario -->

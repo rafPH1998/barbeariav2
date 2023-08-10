@@ -187,6 +187,7 @@ class Schedule extends Model
                 ->join('users', 'schedules.barber', '=', 'users.id')
                 ->select('schedules.*', 'canceleds.description', 'canceleds.user_id AS author_canceled_id', 'users.name AS barber_name')
                 ->where('schedules.user_id', auth()->user()->id)
+                ->orderBy('status', 'ASC')
                 ->paginate(3);
     }      
 

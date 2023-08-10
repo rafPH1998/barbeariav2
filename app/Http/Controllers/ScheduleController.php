@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\AvailableTimeEnum;
 use App\Models\Schedule;
+use App\Models\Service;
 use App\Models\User;
 use App\Services\CalendarService;
 use App\Services\ScheduleService;
@@ -47,15 +48,18 @@ class ScheduleController extends Controller
 
     public function typeForm()
     {
-        return Inertia::render('Schedule/TypeForm');
+        $services = Service::all();
+        return Inertia::render('Schedule/TypeForm', ['services' => $services]);
     }
 
     public function create($type)
     {
+        $getPriceService = Service::where('name_plan', '=', $type)->first();
         $schedules = $this->schedules->haveScheduling();
 
         return Inertia::render('Schedule/Create', [
             'service'   => $type,
+            'pricePlan' => $getPriceService->price_plan,
             'schedules' => $schedules
         ]);
     }
@@ -125,15 +129,13 @@ class ScheduleController extends Controller
             'barber' => 'required',
             'end_service' => 'nullable',
         ]);   
-        
         try {
             $horaCorte = Carbon::createFromFormat('H:i', $request->hour);
-            $horasAdicionais = ScheduleService::calculateServiceTime($request->type);
+            $horasAdicionais = ScheduleService::calculateServiceTime($request->pricePlan);
             $horaCorte->addHours($horasAdicionais);
-            $price = ScheduleService::calculatePriceService($request->type);
-
+            
             $data['end_service'] = $horaCorte->format('H:i');
-            $data['price']       = $price;
+            $data['price']       = $request->pricePlan;
             $data['date']        = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
             $data['hour']        = $request->hour;
             $data['service']     = $request->type;

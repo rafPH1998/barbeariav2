@@ -10,6 +10,7 @@
             :value="modelValue"
             :name="name" 
             :id="name" 
+            :placeholder="placeholder"
             @input="$emit('update:modelValue', $event.target.value)"
             :disabled="props.type == 'email' && props.id === 'email'"
             :class="[
@@ -49,6 +50,10 @@ const props = defineProps({
     name: {
         type: String,
         required: true,
+    },
+    placeholder: {
+        type: String,
+        required: false,
     },
     value: {
         type: String,

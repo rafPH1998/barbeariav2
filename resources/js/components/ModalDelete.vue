@@ -18,10 +18,10 @@
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                <h3 class="text-base font-semibold leading-6 text-white" id="modal-title">Deletar funcionário</h3>
+                                <h3 class="text-base font-semibold leading-6 text-white" id="modal-title">Deletar {{props.type}}</h3>
                                 <div class="mt-2">
                                     <p class="text-sm text-gray-400">
-                                        Tem certeza que deseja deletar esse funcionário ?
+                                        Tem certeza que deseja deletar esse {{props.type}} ?
                                     </p>
                                 </div>
                             </div>
@@ -29,7 +29,7 @@
                     </div>
                     <hr class="border-slate-700">
                     <div class="bg-zinc-900 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                        <button @click="$emit('deleteUser', modal.userId)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Sim</button>
+                        <button @click="$emit('delete', modal.userId)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Sim</button>
                         <button @click="$emit('closeModal')" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancelar</button>
                     </div>
                 </div>
@@ -40,8 +40,10 @@
 
 <script setup>
 
+
     const props = defineProps({
-        modal: Object
+        modal: Object,
+        type: String
     })
 
 </script>

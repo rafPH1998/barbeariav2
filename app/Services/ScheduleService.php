@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
@@ -21,31 +22,13 @@ class ScheduleService
         return Carbon::now()->greaterThan($dateAndHour);
     }
 
-    public static function calcularHorasAdicionais(string $servico): int
-    {
-        return match ($servico) {
-            'corte'       => 1,
-            'corte_barba' => 2,
-            default       => 0,
-        };
-    }
-
     public static function calculateServiceTime(string $servico): int
     {
-        return match ($servico) {
-            'corte'       => 1,
-            'corte_barba' => 2,
-            default       => 0,
-        };
-    }
-
-    public static function calculatePriceService(string $servico): int
-    {
-        return match ($servico) {
-            'corte'       => 25,
-            'corte_barba' => 45,
-            default       => 0,
-        };
+        if ($servico <= 30) {
+            return 1;
+        } elseif ($servico <= 60) {
+            return 2;
+        }
     }
 
     public static function isHoliday(?string $date): bool|string

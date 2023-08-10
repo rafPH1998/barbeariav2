@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     EmployeController,
     ForgotPasswordController,
     ScheduleController,
+    ServiceSchedule,
     UserController
 };
 
@@ -57,9 +58,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/schedules/get-dates', [ScheduleController::class, 'getDates'])->name('schedules.getDates');
     Route::get('/schedules/get-barbers', [ScheduleController::class, 'getBarbers'])->name('schedules.getBarbers');
     
-    Route::get('/create/{type}', [ScheduleController::class, 'create'])
-            ->name('schedules.create')
-            ->where('type', 'corte|corte_barba');
+    Route::get('/create/{type}', [ScheduleController::class, 'create'])->name('schedules.create');
+ 
     
     Route::resource('/schedules', ScheduleController::class)->only(['index', 'store']);
     Route::post('/schedules/canceleds', CanceledsSchedule::class)->name('canceled');
@@ -97,6 +97,11 @@ Route::middleware('auth')->group(function() {
     *Route para funcionarios
     */
     Route::resource('/employees', EmployeController::class)->except(['show', 'edit', 'create']);
+
+    Route::get('/services', [ServiceSchedule::class, 'index'])->name('services.index');
+    Route::get('/services/create', [ServiceSchedule::class, 'create'])->name('services.create');
+    Route::post('/services/create', [ServiceSchedule::class, 'store'])->name('services.create');
+    Route::delete('/services/{id}', [ServiceSchedule::class, 'destroy'])->name('services.delete');
     
 }); 
 

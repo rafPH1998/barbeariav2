@@ -8,7 +8,7 @@
                 @closeModal="modal = false" 
             />
 
-            <div id="last-users mt-10l">
+            <div id="last-users mt-10">
                 <h1 class="font-bold py-4 uppercase">Tabela de agendamentos</h1>
 
                 <div class="flex justify-between mt-5">
