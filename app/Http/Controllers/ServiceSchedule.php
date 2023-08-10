@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -10,13 +11,26 @@ class ServiceSchedule extends Controller
 {
     public function index()
     {
-        $servicesSchedules = Service::all();
-        return Inertia::render('Services/Index', ['servicesSchedules' => $servicesSchedules]);
+        try {
+            $this->authorize('viewAny', User::class);
+
+            $servicesSchedules = Service::all();
+            return Inertia::render('Services/Index', ['servicesSchedules' => $servicesSchedules]);
+
+        } catch (\Throwable $th) {
+            return redirect()->route('schedules.mySchedules');
+        }
     }
 
     public function create()
     {
-        return Inertia::render('Services/Create');
+        try {
+            $this->authorize('create', User::class);
+            return Inertia::render('Services/Create');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('schedules.mySchedules');
+        }
     }
 
     public function store(Request $request)
